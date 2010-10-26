@@ -8,7 +8,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     ENV["GUARD_ENV"] = 'test'
-    @lib_path = Pathname.new(File.expand_path('../../lib/', __FILE__))
   end
 
   config.after(:each) do
