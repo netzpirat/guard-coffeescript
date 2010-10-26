@@ -33,17 +33,17 @@ describe Guard::CoffeeScript::Runner do
 
   describe '.coffee_script_command' do
     it 'passes the paths to the coffee command' do
-      runner.should_receive(:`).with('coffee -c -o js a.coffee b.coffee').and_return 0
+      runner.should_receive(:`).with('coffee -c -o js a.coffee b.coffee 2>&1').and_return 0
       runner.run(['a.coffee', 'b.coffee'], :output => 'js')
     end
 
     it 'passes the --no-wrap option to the coffee command' do
-      runner.should_receive(:`).with('coffee -c --no-wrap -o js x.coffee y.coffee').and_return 0
+      runner.should_receive(:`).with('coffee -c --no-wrap -o js x.coffee y.coffee 2>&1').and_return 0
       runner.run(['x.coffee', 'y.coffee'], :output => 'js', :nowrap => true)
     end
 
     it 'passes the -o option to the coffee command' do
-      runner.should_receive(:`).with('coffee -c -o output_path a.coffee b.coffee').and_return 0
+      runner.should_receive(:`).with('coffee -c -o output_path a.coffee b.coffee 2>&1').and_return 0
       runner.run(['a.coffee', 'b.coffee'], :output => 'output_path')
     end
   end
