@@ -73,12 +73,12 @@ describe Guard::CoffeeScript do
 
     let(:guard) { Guard::CoffeeScript.new }
 
-    it 'should pass the matched files to the inspector for cleanup' do
+    it 'should pass the matched paths to the inspector for cleanup' do
       Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee']).and_return ['a.coffee']
       guard.run_on_change(['a.coffee'])
     end
 
-    it 'should run on the changed files' do
+    it 'should run on the changed paths' do
       Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], { :output => 'javascripts', :nowrap => false })
       guard.run_on_change(['a.coffee'])
     end
