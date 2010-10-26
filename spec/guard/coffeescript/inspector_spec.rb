@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Guard::CoffeeScript::Inspector do
   before do
-    Dir.stub!(:glob).and_return 'a.coffee'
+    Dir.stub(:glob).and_return 'a.coffee'
   end
 
   subject { Guard::CoffeeScript::Inspector }

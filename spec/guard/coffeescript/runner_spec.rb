@@ -6,8 +6,8 @@ describe Guard::CoffeeScript::Runner do
   describe '.run' do
     context 'when no message option is passed' do
       it 'shows a default message' do
-        runner.stub!(:system).and_return true
-        runner.stub!(:`).and_return 0
+        runner.stub(:system).and_return true
+        runner.stub(:`).and_return 0
         Guard::UI.should_receive(:info).with('Running: a.coffee', { :reset => true })
         runner.run(['a.coffee'])
       end
@@ -15,8 +15,8 @@ describe Guard::CoffeeScript::Runner do
 
     context 'when a custom message option is passed' do
       it 'shows the custom message' do
-        runner.stub!(:system).and_return true
-        runner.stub!(:`).and_return 0
+        runner.stub(:system).and_return true
+        runner.stub(:`).and_return 0
         Guard::UI.should_receive(:info).with('Custom Message', { :reset => true })
         runner.run(['a.coffee'], { :message => 'Custom Message' })
       end
@@ -24,7 +24,7 @@ describe Guard::CoffeeScript::Runner do
 
     context 'when CoffeeScript is not installed' do
       it 'shows an error message that the coffee command is not installed' do
-        runner.stub!(:system).and_return false
+        runner.stub(:system).and_return false
         Guard::UI.should_receive(:error).with("Command 'coffee' not found. Please install CoffeeScript.")
         runner.run(['a.coffee'])
       end

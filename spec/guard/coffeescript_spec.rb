@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Guard::CoffeeScript do
   before do
-    Guard::CoffeeScript::Runner.stub!(:system).and_return true
-    Guard::CoffeeScript::Runner.stub!(:`).and_return 0
+    Guard::CoffeeScript::Runner.stub(:system).and_return true
+    Guard::CoffeeScript::Runner.stub(:`).and_return 0
   end
 
   describe '#initialize' do
@@ -38,7 +38,7 @@ describe Guard::CoffeeScript do
 
   describe '#run_all' do
     before do
-      Dir.stub!(:glob).and_return ['a.coffee', 'x/b.coffee', 'x/c.coffee', 'x/y/d.coffee']
+      Dir.stub(:glob).and_return ['a.coffee', 'x/b.coffee', 'x/c.coffee', 'x/y/d.coffee']
     end
 
     context 'a single CoffeeScript watcher' do
@@ -68,7 +68,7 @@ describe Guard::CoffeeScript do
 
   describe "#run_on_change" do
     before do
-      Dir.stub!(:glob).and_return ['a.coffee']
+      Dir.stub(:glob).and_return ['a.coffee']
     end
 
     let(:guard) { Guard::CoffeeScript.new }
