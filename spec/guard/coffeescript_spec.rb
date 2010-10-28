@@ -47,7 +47,7 @@ describe Guard::CoffeeScript do
      it 'runs all watched CoffeeScript files' do
       Guard::CoffeeScript::Runner.should_receive(:run).with(
           ['a.coffee'],
-          { :output => 'javascripts', :nowrap => false, :message => 'Generate all CoffeeScripts' }).and_return true
+          { :output => 'javascripts', :nowrap => false, :message => 'Compile all CoffeeScripts' }).and_return true
 
       guard.run_all
       end
@@ -59,7 +59,7 @@ describe Guard::CoffeeScript do
      it 'runs all watched CoffeeScript files' do
       Guard::CoffeeScript::Runner.should_receive(:run).with(
           ['x/b.coffee', 'x/c.coffee', 'x/y/d.coffee'],
-          { :output => 'javascripts', :nowrap => false, :message => 'Generate all CoffeeScripts' }).and_return true
+          { :output => 'javascripts', :nowrap => false, :message => 'Compile all CoffeeScripts' }).and_return true
 
       guard.run_all
       end

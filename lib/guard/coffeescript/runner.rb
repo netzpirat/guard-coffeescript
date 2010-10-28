@@ -1,19 +1,26 @@
+require 'open3'
+
 module Guard
   class CoffeeScript
     module Runner
       class << self
+        include Open3
 
         def run(paths, options = {})
+
           if coffee_executable_exists?
-            message = options[:message] || "Running: #{paths.join(' ')}"
+            message = options[:message] || "Compile #{paths.join(' ')}"
             ::Guard::UI.info message, :reset => true
 
-            out = `#{ coffee_script_command(paths, options) } 2>&1`
-            if $?.to_i == 0
-              message = message.gsub(/Running:/, 'Successful compiled')
+            output, status = capture2e(coffee_script_command(paths, options))
+
+            puts output
+
+            if status.to_i == 0
+              message = message.gsub(/^Compile/, 'Successfully compiled')
               ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
             else
-              message = out.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
+              message = output.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
               ::Guard::Notifier.notify(message, :title => 'CoffeeScript results', :image => :failed)
             end
 
