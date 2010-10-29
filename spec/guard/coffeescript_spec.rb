@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Guard::CoffeeScript do
   before do
     Guard::CoffeeScript::Runner.stub(:system).and_return true
-    Guard::CoffeeScript::Runner.stub(:capture2e).and_return ['', 0]
+    Guard::CoffeeScript::Runner.stub(:`).and_return ''
   end
 
   describe '#initialize' do

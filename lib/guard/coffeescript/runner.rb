@@ -1,10 +1,7 @@
-require 'open3'
-
 module Guard
   class CoffeeScript
     module Runner
       class << self
-        include Open3
 
         def run(paths, options = {})
 
@@ -12,11 +9,11 @@ module Guard
             message = options[:message] || "Compile #{paths.join(' ')}"
             ::Guard::UI.info message, :reset => true
 
-            output, status = capture2e(coffee_script_command(paths, options))
+            output = `#{ coffee_script_command(paths, options) } 2>&1`
 
             puts output
 
-            if status.to_i == 0
+            if $?.to_i == 0
               message = message.gsub(/^Compile/, 'Successfully compiled')
               ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
             else
