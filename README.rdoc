@@ -47,6 +47,21 @@ Please read {guard doc}[http://github.com/guard/guard#readme] for more info abou
       watch('^app/coffeescripts/(.*)\.coffee')
     end
 
+=== Rails app with CoffeeScripts accross several subdirectories
+
+If you organize your CoffeeScripts in a directory structure and want to compile these to an output folder that
+contains a part of these directories, you'll have to script your guards for now:
+
+    require 'find'
+    
+    Find.find('app/coffeescripts') do |path|
+      if FileTest.directory?(path)
+        guard 'coffeescript', :output => "public/javascripts/compiled/#{ path.gsub('app/coffeescripts', '') }" do
+          watch ("^#{ path }/[^/]*\.coffee")
+        end
+      end
+    end
+
 == Development
 
 - Source hosted at {GitHub}[http://github.com/netzpirat/guard-coffeescript]
