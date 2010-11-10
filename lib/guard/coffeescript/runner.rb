@@ -2,44 +2,56 @@ module Guard
   class CoffeeScript
     module Runner
       class << self
+        
+        def run(files, watchers, options = {})
+          message = options[:message] || "Compile #{ files.join(' ') }"
+          ::Guard::UI.info message, :reset => true
 
-        def run(paths, options = {})
+          errors = []
+          directories = options[:directories] ? detect_nested_directories(watchers, files, options) : { options[:output] => files }
 
-          if coffee_executable_exists?
-            message = options[:message] || "Compile #{paths.join(' ')}"
-            ::Guard::UI.info message, :reset => true
+          directories.each do |directory, scripts|
+            directory = File.expand_path(directory)
 
-            output = `#{ coffee_script_command(paths, options) } 2>&1`
-
-            puts output
-
-            if $?.to_i == 0
-              message = message.gsub(/^Compile/, 'Successfully compiled')
-              ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
-            else
-              message = output.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
-              ::Guard::Notifier.notify(message, :title => 'CoffeeScript results', :image => :failed)
+            scripts.each do |file|
+              content = Compiler.compile(File.open(file), options)
+              if $?.success?
+                FileUtils.mkdir_p(directory) if !File.directory?(directory)
+                File.open(File.join(directory, File.basename(file)), 'w') { |f| f.write(content) }
+              else
+                errors << File.join(directory, File.basename(file)) + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
+                ::Guard::UI.error(content)
+              end
             end
-
-          else
-            ::Guard::UI.error "Command 'coffee' not found. Please install CoffeeScript."
           end
+
+          if errors.empty?
+            message = message.gsub(/^Compile/, 'Successfully compiled')
+            ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
+          else
+            puts errors.inspect
+            ::Guard::Notifier.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed)
+          end
+          
+        rescue LoadError
+          ::Guard::UI.error "Command 'coffee' not found. Please install CoffeeScript."    
         end
 
       private
 
-        def coffee_script_command(paths, options)
-          cmd_parts = []
-          cmd_parts << 'coffee'
-          cmd_parts << '-c'
-          cmd_parts << '--no-wrap' if options[:nowrap]
-          cmd_parts << "-o #{ options[:output] }"
-          cmd_parts << paths.join(' ')
-          cmd_parts.join(' ')
-        end
-
-        def coffee_executable_exists?
-          system('which coffee > /dev/null 2>/dev/null')
+        def detect_nested_directories(watchers, files, options)
+          directories = {}
+          watchers.product(files) do |watcher, file|
+            if matches = file.match(watcher.pattern)
+              target = File.join(options[:output], File.dirname(matches[1]))
+              if directories[target]
+                directories[target] << file
+              else
+                directories[target] = [file]
+              end
+            end
+          end
+          directories
         end
 
       end
