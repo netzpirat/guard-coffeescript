@@ -10,10 +10,11 @@ module Guard
     autoload :Compiler, 'guard/coffeescript/compiler'
 
     def initialize(watchers = [], options = {})
-      super watchers, options
-      options[:output] ||= 'javascripts'
-      options[:wrap] ||= true
-      options[:directories] ||= true
+      super(watchers, {
+        :output => 'javascripts',
+        :wrap => true,
+        :shallow => false
+      }.merge(options))
     end
 
     def run_all

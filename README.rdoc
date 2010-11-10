@@ -51,12 +51,33 @@ Please read {guard doc}[http://github.com/guard/guard#readme] for more info abou
 
 There following options can be passed to the CoffeeSCript Guard:
 
-    :output => '/output/directory'
+    :output => 'javascripts'            # Relative path to the output directory
     :wrap => false                      # Compile without the top-level function wrapper
-    :directories => false               # Do not create nested output directories
+    :shallow => true                    # Do not create nested output directories
 
-The guard detects by default nested directories and creates these within the output folder. This behaviour can
-be switched off by passing the option :directories => false to the guard.
+=== Nested directories
+
+The guard detects by default nested directories and creates these within the output folder. The detection is based on
+the match of the watch regular expression:
+
+A file
+
+    /app/coffeescripts/ui/buttons/toggle_button.coffee
+
+that has been detected by the watch
+
+    watch('^app/coffeescripts/(.*)\.coffee')
+
+with an output folder of
+
+    :output => 'public/javascripts/compiled'
+
+will be compiled to
+
+    public/javascripts/compiled/ui/buttons/toggle_button.js
+
+This behaviour can be switched off by passing the option ':shallow => false' to the guard, so that all JavaScripts will
+be compiled directly to the output directory.
 
 == Development
 
