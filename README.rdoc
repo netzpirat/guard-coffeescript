@@ -57,8 +57,7 @@ There following options can be passed to the CoffeeSCript Guard:
 
 === Nested directories
 
-The guard detects by default nested directories and creates these within the output folder. The detection is based on
-the match of the watch regular expression:
+The guard detects by default nested directories and creates these within the output directory. The detection is based on the match of the watch regular expression:
 
 A file
 
@@ -68,7 +67,7 @@ that has been detected by the watch
 
     watch('^app/coffeescripts/(.*)\.coffee')
 
-with an output folder of
+with an output directory of
 
     :output => 'public/javascripts/compiled'
 
