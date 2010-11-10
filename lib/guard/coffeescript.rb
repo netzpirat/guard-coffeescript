@@ -1,7 +1,6 @@
 require 'guard'
 require 'guard/guard'
 require 'guard/watcher'
-require 'coffee_script'
 
 module Guard
   class CoffeeScript < Guard
