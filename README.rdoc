@@ -32,7 +32,7 @@ Please read {guard usage doc}[http://github.com/guard/guard#readme]
 
 == Guardfile
 
-CoffeeScript guard can be really be adapated to all kind of projects.
+CoffeeScript guard can be adapated to all kind of projects.
 Please read {guard doc}[http://github.com/guard/guard#readme] for more info about Guardfile DSL.
 
 === Standard ruby gems
