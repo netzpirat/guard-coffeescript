@@ -55,7 +55,7 @@ module Guard
 
           directories = {}
 
-          watchers.product(files) do |watcher, file|
+          watchers.product(files).each do |watcher, file|
             if matches = file.match(watcher.pattern)
               target = File.join(options[:output], File.dirname(matches[1]))
               if directories[target]
