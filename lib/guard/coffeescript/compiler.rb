@@ -1,7 +1,12 @@
 module Guard
   class CoffeeScript
+
     # This has been kindly borrowed from https://github.com/josh/ruby-coffee-script/raw/master/lib/coffee_script.rb
-    # due to namespace conflicts
+    # due to namespace conflicts with the guards own CoffeeScript class
+    #
+    # The only change to the original file is to redirect stderr to stdout when executing the compiler,
+    # so that the error messages can easily be parsed and sent to the Growl notifier.
+    #
     module Compiler
       class << self
         def locate_coffee_bin
