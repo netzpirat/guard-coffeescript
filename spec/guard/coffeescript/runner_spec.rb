@@ -21,7 +21,7 @@ describe Guard::CoffeeScript::Runner do
 
       it 'compiles the CoffeeScripts to the output and creates nested directories' do
         FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts/x/y")
-        File.should_receive(:open).with("#{ @project_path }/javascripts/x/y/a.coffee", 'w')
+        File.should_receive(:open).with("#{ @project_path }/javascripts/x/y/a.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => false })
       end
     end
@@ -31,7 +31,7 @@ describe Guard::CoffeeScript::Runner do
 
       it 'compiles the CoffeeScripts to the output without creating nested directories' do
         FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts")
-        File.should_receive(:open).with("#{ @project_path }/javascripts/a.coffee", 'w')
+        File.should_receive(:open).with("#{ @project_path }/javascripts/a.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => true })
       end
     end

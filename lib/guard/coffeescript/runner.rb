@@ -43,7 +43,7 @@ module Guard
         def process_compile_result(content, file, directory, errors, success)
           if success
             FileUtils.mkdir_p(directory) if !File.directory?(directory)
-            File.open(File.join(directory, File.basename(file)), 'w') { |f| f.write(content) }
+            File.open(File.join(directory, File.basename(file.gsub(/coffee$/, 'js'))), 'w') { |f| f.write(content) }
           else
             errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
             ::Guard::UI.error(content)
