@@ -18,7 +18,7 @@ module Guard
     end
 
     def run_all
-      Runner.run(Inspector.clean(Watcher.match_files(self, Dir.glob(File.join('**', '*.coffee')))), watchers, options)
+      run_on_change(Watcher.match_files(self, Dir.glob(File.join('**', '*.coffee'))))
     end
 
     def run_on_change(paths)

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Guard::CoffeeScript do
+
   before do
     Guard::CoffeeScript::Inspector.stub(:clean)
     Guard::CoffeeScript::Runner.stub(:run)
@@ -41,8 +42,30 @@ describe Guard::CoffeeScript do
   end
 
   describe '.run_all' do
+    let(:guard) { Guard::CoffeeScript.new([Guard::Watcher.new('^x/(.*)\.coffee')]) }
+
+    before do
+      Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee']
+    end
+
+    it 'runs the run_on_change with all watched CoffeeScripts' do
+      guard.should_receive(:run_on_change).with(['x/a.coffee', 'x/b.coffee'])
+      guard.run_all
+    end
   end
 
   describe '.run_on_change' do
+    let(:guard) { Guard::CoffeeScript.new }
+
+    it 'passes the paths to the Inspector for cleanup' do
+      Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'])
+      guard.run_on_change(['a.coffee', 'b.coffee'])
+    end
+
+    it 'starts the Runner with the cleaned files' do
+      Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
+      Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], [], { :output=>"javascripts", :wrap=>true, :shallow=>false })
+      guard.run_on_change(['a.coffee', 'b.coffee'])
+    end
   end
 end
