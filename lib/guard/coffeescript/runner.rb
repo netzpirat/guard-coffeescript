@@ -5,7 +5,7 @@ module Guard
 
         def run(files, watchers, options = {})
           message = notify_start(files, options)
-          errors = compile(files, options, watchers)
+          errors = compile_files(files, options, watchers)
           notify_result(errors, message)
           
         rescue LoadError
@@ -15,32 +15,37 @@ module Guard
       private
 
         def notify_start(files, options)
-          message = options[:message] || "Compile #{ files.join(' ') }"
+          message = options[:message] || "Compile #{ files.join(', ') }"
           ::Guard::UI.info message, :reset => true
           message
         end
 
-        def compile(files, options, watchers)
+        def compile_files(files, options, watchers)
           errors      = []
           directories = detect_nested_directories(watchers, files, options)
 
           directories.each do |directory, scripts|
             directory = File.expand_path(directory)
             scripts.each do |file|
-              content = Compiler.compile(File.open(file), options)
-              process_compile_result(content, directory, errors, file)
+              content, success = compile(file, options)
+              process_compile_result(content, file, directory, errors, success)
             end
           end
 
           errors
         end
 
-        def process_compile_result(content, directory, errors, file)
-          if $?.success?
+        def compile(file, options)
+          content = Compiler.compile(File.open(file), options)
+          [content, $?.success?]
+        end
+
+        def process_compile_result(content, file, directory, errors, success)
+          if success
             FileUtils.mkdir_p(directory) if !File.directory?(directory)
             File.open(File.join(directory, File.basename(file)), 'w') { |f| f.write(content) }
           else
-            errors << File.join(directory, File.basename(file)) + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
+            errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
             ::Guard::UI.error(content)
           end
         end

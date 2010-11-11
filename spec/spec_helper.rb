@@ -8,6 +8,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     ENV["GUARD_ENV"] = 'test'
+    @project_path = Pathname.new(File.expand_path('../../', __FILE__))
   end
 
   config.after(:each) do
