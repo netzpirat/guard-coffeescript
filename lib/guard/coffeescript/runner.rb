@@ -28,8 +28,7 @@ module Guard
           directories.each do |directory, scripts|
             scripts.each do |file|
               content, success = compile(file, options)
-              changed_file = process_compile_result(content, file, directory, errors, success)
-              changed_files << changed_file
+              changed_files << process_compile_result(content, file, directory, errors, success)
             end
           end
 
