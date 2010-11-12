@@ -47,7 +47,7 @@ describe Guard::CoffeeScript::Runner do
     context 'without compilation errors' do
       it 'shows a success messages' do
         runner.should_receive(:compile).with('a.coffee', { :output => 'javascripts' }).and_return ["OK", true]
-        Guard::Notifier.should_receive(:notify).with('Successfully compiled a.coffee', :title => 'CoffeeScript results')
+        Guard::Notifier.should_receive(:notify).with('Successfully generated javascripts/a.js', :title => 'CoffeeScript results')
         runner.run(['a.coffee'], [watcher], { :output => 'javascripts' })
       end
     end

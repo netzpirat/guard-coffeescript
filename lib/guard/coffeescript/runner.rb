@@ -4,10 +4,11 @@ module Guard
       class << self
 
         def run(files, watchers, options = {})
-          message = notify_start(files, options)
-          errors = compile_files(files, options, watchers)
-          notify_result(errors, message)
-          
+          notify_start(files, options)
+          changed_files, errors = compile_files(files, options, watchers)
+          notify_result(changed_files, errors)
+
+          changed_files
         rescue LoadError
           ::Guard::UI.error "Command 'coffee' not found. Please install CoffeeScript."    
         end
@@ -17,22 +18,22 @@ module Guard
         def notify_start(files, options)
           message = options[:message] || "Compile #{ files.join(', ') }"
           ::Guard::UI.info message, :reset => true
-          message
         end
 
         def compile_files(files, options, watchers)
-          errors      = []
-          directories = detect_nested_directories(watchers, files, options)
+          errors        = []
+          changed_files = []
+          directories   = detect_nested_directories(watchers, files, options)
 
           directories.each do |directory, scripts|
-            directory = File.expand_path(directory)
             scripts.each do |file|
               content, success = compile(file, options)
-              process_compile_result(content, file, directory, errors, success)
+              changed_file = process_compile_result(content, file, directory, errors, success)
+              changed_files << changed_file
             end
           end
 
-          errors
+          [changed_files.compact, errors]
         end
 
         def compile(file, options)
@@ -42,11 +43,16 @@ module Guard
 
         def process_compile_result(content, file, directory, errors, success)
           if success
-            FileUtils.mkdir_p(directory) if !File.directory?(directory)
-            File.open(File.join(directory, File.basename(file.gsub(/coffee$/, 'js'))), 'w') { |f| f.write(content) }
+            FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
+            filename = File.join(directory, File.basename(file.gsub(/coffee$/, 'js')))
+            File.open(File.expand_path(filename), 'w') { |f| f.write(content) }
+
+            filename
           else
             errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
             ::Guard::UI.error(content)
+
+            nil
           end
         end
 
@@ -57,7 +63,7 @@ module Guard
 
           watchers.product(files).each do |watcher, file|
             if matches = file.match(watcher.pattern)
-              target = File.join(options[:output], File.dirname(matches[1]))
+              target = File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '')
               if directories[target]
                 directories[target] << file
               else
@@ -69,9 +75,9 @@ module Guard
           directories
         end
 
-        def notify_result(errors, message)
+        def notify_result(changed_files, errors)
           if errors.empty?
-            message = message.gsub(/^Compile/, 'Successfully compiled')
+            message = "Successfully generated #{ changed_files.join(', ') }"
             ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
           else
             ::Guard::Notifier.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed)

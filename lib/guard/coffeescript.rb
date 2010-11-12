@@ -22,8 +22,18 @@ module Guard
     end
 
     def run_on_change(paths)
-      Runner.run(Inspector.clean(paths), watchers, options)
+      changed_files = Runner.run(Inspector.clean(paths), watchers, options)
+      notify changed_files
     end
 
+    private
+
+    def notify changed_files
+      ::Guard.guards.each do |guard|
+        paths = Watcher.match_files(guard, changed_files)
+        guard.run_on_change paths unless paths.empty?
+      end
+    end
+    
   end
 end
