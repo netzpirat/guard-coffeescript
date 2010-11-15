@@ -48,7 +48,7 @@ module Guard
 
             filename
           else
-            errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/ }.join("\n")
+            errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/i }.join("\n")
             ::Guard::UI.error(content)
 
             nil
