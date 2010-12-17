@@ -56,13 +56,13 @@ Please read {guard doc}[http://github.com/guard/guard#readme] for more info abou
 === Standard ruby gems
 
     guard 'coffeescript' do
-      watch('^coffeescripts/(.*)\.coffee')
+      watch(%r{coffeescripts/.+\.coffee})
     end
 
 === Rails app
 
     guard 'coffeescript', :output => 'public/javascripts/compiled' do
-      watch('^app/coffeescripts/(.*)\.coffee')
+      watch(%r{app/coffeescripts/.+\.coffee})
     end
 
 == Options
@@ -83,7 +83,7 @@ A file
 
 that has been detected by the watch
 
-    watch('^app/coffeescripts/(.*)\.coffee')
+    watch(%r{app/coffeescripts/.+\.coffee})
 
 with an output directory of
 
@@ -93,7 +93,7 @@ will be compiled to
 
     public/javascripts/compiled/ui/buttons/toggle_button.js
 
-This behaviour can be switched off by passing the option ':shallow => true' to the guard, so that all JavaScripts will
+This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will
 be compiled directly to the output directory.
 
 == Development
