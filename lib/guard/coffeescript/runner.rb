@@ -1,5 +1,7 @@
+require 'coffee_script'
+
 module Guard
-  class CoffeeScript
+  class CoffeeScriptGuard
     module Runner
       class << self
 
@@ -9,8 +11,8 @@ module Guard
           notify_result(changed_files, errors)
 
           changed_files
-        rescue LoadError
-          ::Guard::UI.error "Command 'coffee' not found. Please install CoffeeScript."    
+        rescue CoffeeScript::EngineError => e
+          ::Guard::UI.error "CoffeeScript engine error: " + e.message
         end
 
       private
@@ -27,8 +29,14 @@ module Guard
 
           directories.each do |directory, scripts|
             scripts.each do |file|
-              content, success = compile(file, options)
-              changed_files << process_compile_result(content, file, directory, errors, success)
+              begin
+                content = compile(file, options)
+                changed_files << process_compile_result(content, file, directory)
+              rescue CoffeeScript::CompilationError => e
+                error_message = file + ': ' + e.message
+                errors << error_message
+                ::Guard::UI.error(error_message)
+              end
             end
           end
 
@@ -36,23 +44,15 @@ module Guard
         end
 
         def compile(file, options)
-          content = Compiler.compile(File.open(file), options)
-          [content, $?.success?]
+          CoffeeScript.compile(File.read(file), options)
         end
 
-        def process_compile_result(content, file, directory, errors, success)
-          if success
-            FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
-            filename = File.join(directory, File.basename(file.gsub(/coffee$/, 'js')))
-            File.open(File.expand_path(filename), 'w') { |f| f.write(content) }
+        def process_compile_result(content, file, directory)
+          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
+          filename = File.join(directory, File.basename(file.gsub(/coffee$/, 'js')))
+          File.open(File.expand_path(filename), 'w') { |f| f.write(content) }
 
-            filename
-          else
-            errors << file + ': ' + content.split("\n").select { |line| line =~ /^Error:/i }.join("\n")
-            ::Guard::UI.error(content)
-
-            nil
-          end
+          filename
         end
 
         def detect_nested_directories(watchers, files, options)

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Guard::CoffeeScript::Inspector do
+describe Guard::CoffeeScriptGuard::Inspector do
   before do
     Dir.stub(:glob).and_return 'a.coffee'
   end
 
-  subject { Guard::CoffeeScript::Inspector }
+  subject { Guard::CoffeeScriptGuard::Inspector }
 
   describe 'clean' do
     it 'removes duplicate files' do

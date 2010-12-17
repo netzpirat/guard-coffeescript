@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'guard-coffeescript'
 
   s.add_dependency 'guard', '~> 0.2.2'
+  s.add_dependency 'coffee-script', '~> 2.1.1'
 
   s.add_development_dependency 'bundler',     '~> 1.0.7'
   s.add_development_dependency 'guard-rspec', '~> 0.1.9'

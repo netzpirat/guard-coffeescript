@@ -20,11 +20,29 @@ Add guard definition to your Guardfile by running this command:
 
     guard init coffeescript
 
-== Dependencies
+== CoffeeScript
 
-Since CoffeeScripts is no more a Ruby gem it cannot be installed with Bundler, so you have to install it on your own.
-Please consult the {CoffeeScript documentation}[http://jashkenas.github.com/coffee-script/] for more information about
-how to install the latest CoffeeScript version.
+Guard::CoffeeScript uses {Ruby CoffeeScript}[http://github.com/josh/ruby-coffee-script/] to compile the CoffeeScripts.
+This enables the guard to compile the CoffeeScripts with node.js, JavaScript Core or V8
+
+=== node.js
+
+Please refer to the {CoffeeScript documentation}[http://jashkenas.github.com/coffee-script/] for more information about
+how to install the latest CoffeeScript version on node.js.
+
+=== JavaScript Core
+
+JavaScript Core is only available on Mac OS X. To use JavaScript Core you don't have to install anything, because
+JavaScript Core is packaged with Mac OS X.
+
+=== V8
+
+To use CoffeeScript on V8, simple add `therubyracer` to your Gemfile. The Ruby Racer acts as a bridge between Ruby
+and the V8 engine, that will be automatically installed by the Ruby Racer.
+
+    group :development do
+      gem 'therubyracer'
+    end
 
 == Usage
 
