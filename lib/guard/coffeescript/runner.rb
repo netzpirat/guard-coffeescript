@@ -62,7 +62,7 @@ module Guard
 
           watchers.product(files).each do |watcher, file|
             if matches = file.match(watcher.pattern)
-              target = File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '')
+              target = matches[1] ? File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '') : options[:output]
               if directories[target]
                 directories[target] << file
               else

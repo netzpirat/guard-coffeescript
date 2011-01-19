@@ -16,6 +16,16 @@ describe Guard::CoffeeScriptGuard::Runner do
       runner.run(['a.coffee', 'b.coffee'], [])
     end
 
+    context 'without a ' do
+      let(:watcher) { Guard::Watcher.new(%r{src/.+\.coffee}) }
+
+      it 'compiles the CoffeeScripts to the output without creating nested directories' do
+        FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/target")
+        File.should_receive(:open).with("#{ @project_path }/target/a.js", 'w')
+        runner.run(['src/a.coffee'], [watcher], { :output => 'target' })
+      end
+    end
+
     context 'with the :shallow option set to false' do
       let(:watcher) { Guard::Watcher.new('^app/coffeescripts/(.*)\.coffee') }
 
