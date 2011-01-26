@@ -16,7 +16,7 @@ describe Guard::CoffeeScriptGuard do
       end
 
       it 'sets a default :wrap option' do
-        guard.options[:wrap].should be_true
+        guard.options[:bare].should be_false
       end
 
       it 'sets a default :shallow option' do
@@ -25,14 +25,14 @@ describe Guard::CoffeeScriptGuard do
     end
 
     context 'with other options than the default ones' do
-      let(:guard) { Guard::CoffeeScriptGuard.new(nil, { :output => 'output_folder', :wrap => false, :shallow => true }) }
+      let(:guard) { Guard::CoffeeScriptGuard.new(nil, { :output => 'output_folder', :bare => true, :shallow => true }) }
 
       it 'sets the provided :output option' do
         guard.options[:output].should eql 'output_folder'
       end
  
-      it 'sets the provided :wrap option' do
-        guard.options[:wrap].should be_false
+      it 'sets the provided :bare option' do
+        guard.options[:bare].should be_true
       end
 
       it 'sets the provided :shallow option' do
@@ -70,7 +70,7 @@ describe Guard::CoffeeScriptGuard do
       Guard::CoffeeScriptGuard::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       Guard::CoffeeScriptGuard::Runner.should_receive(:run).with(['a.coffee'], [], {
           :output => 'javascripts',
-          :wrap => true,
+          :bare => false,
           :shallow => false }).and_return ['a.js']
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end

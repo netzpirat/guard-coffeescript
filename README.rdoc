@@ -70,7 +70,7 @@ Please read {guard doc}[http://github.com/guard/guard#readme] for more info abou
 There following options can be passed to the CoffeeSCript Guard:
 
     :output => 'javascripts'            # Relative path to the output directory
-    :wrap => false                      # Compile without the top-level function wrapper
+    :bare => true                       # Compile without the top-level function wrapper
     :shallow => true                    # Do not create nested output directories
 
 === Nested directories

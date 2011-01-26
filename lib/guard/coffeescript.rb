@@ -12,7 +12,7 @@ module Guard
     def initialize(watchers = [], options = {})
       super(watchers, {
         :output => 'javascripts',
-        :wrap => true,
+        :bare => false,
         :shallow => false
       }.merge(options))
     end
