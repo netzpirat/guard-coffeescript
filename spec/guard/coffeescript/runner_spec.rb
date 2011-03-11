@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Guard::CoffeeScriptGuard::Runner do
+describe Guard::CoffeeScript::Runner do
   describe '#run' do
-    let(:runner)  { Guard::CoffeeScriptGuard::Runner }
+    let(:runner)  { Guard::CoffeeScript::Runner }
     let(:watcher) { Guard::Watcher.new('^(.*)\.coffee') }
 
     before do

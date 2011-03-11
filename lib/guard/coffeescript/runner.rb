@@ -1,7 +1,7 @@
 require 'coffee_script'
 
 module Guard
-  class CoffeeScriptGuard
+  class CoffeeScript
     module Runner
       class << self
 

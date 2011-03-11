@@ -1,5 +1,5 @@
 module Guard
-  class CoffeeScriptGuard
+  class CoffeeScript
     module Inspector
       class << self
 
