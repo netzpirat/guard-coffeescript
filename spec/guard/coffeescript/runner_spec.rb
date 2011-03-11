@@ -48,7 +48,7 @@ describe Guard::CoffeeScript::Runner do
 
     context 'with compilation errors' do
       it 'shows the error messages' do
-        runner.should_receive(:compile).and_raise CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
+        runner.should_receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
         Guard::Notifier.should_receive(:notify).with("a.coffee: Parse error on line 2: Unexpected 'UNARY'", :title => 'CoffeeScript results', :image => :failed)
         runner.run(['a.coffee'], [watcher], { :output => 'javascripts' })
       end
