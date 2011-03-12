@@ -1,7 +1,7 @@
 require 'coffee_script'
 
 module Guard
-  class CoffeeScriptGuard
+  class CoffeeScript
     module Runner
       class << self
 
@@ -11,7 +11,7 @@ module Guard
           notify_result(changed_files, errors)
 
           changed_files
-        rescue CoffeeScript::EngineError => e
+        rescue ::CoffeeScript::EngineError => e
           ::Guard::UI.error "CoffeeScript engine error: " + e.message
         end
 
@@ -32,7 +32,7 @@ module Guard
               begin
                 content = compile(file, options)
                 changed_files << process_compile_result(content, file, directory)
-              rescue CoffeeScript::CompilationError => e
+              rescue ::CoffeeScript::CompilationError => e
                 error_message = file + ': ' + e.message
                 errors << error_message
                 ::Guard::UI.error(error_message)
@@ -44,7 +44,7 @@ module Guard
         end
 
         def compile(file, options)
-          CoffeeScript.compile(File.read(file), options)
+          ::CoffeeScript.compile(File.read(file), options)
         end
 
         def process_compile_result(content, file, directory)

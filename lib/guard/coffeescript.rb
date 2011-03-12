@@ -3,7 +3,7 @@ require 'guard/guard'
 require 'guard/watcher'
 
 module Guard
-  class CoffeeScriptGuard < Guard
+  class CoffeeScript < Guard
 
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
