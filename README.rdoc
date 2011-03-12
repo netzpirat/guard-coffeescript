@@ -20,10 +20,15 @@ Add guard definition to your Guardfile by running this command:
 
     guard init coffeescript
 
+== JSON
+
+The json library is also required but is not explicitly stated as a gem dependency. If you're on Ruby 1.8 you'll need
+to install the json or json_pure gem. On Ruby 1.9, json is included in the standard library.
+    
 == CoffeeScript
 
-Guard::CoffeeScript uses {Ruby CoffeeScript}[http://github.com/josh/ruby-coffee-script/] to compile the CoffeeScripts.
-This enables the guard to compile the CoffeeScripts with node.js, JavaScript Core or V8
+Guard::CoffeeScript uses {Ruby CoffeeScript}[http://github.com/josh/ruby-coffee-script/] to compile the CoffeeScripts,
+that in turn uses {ExecJS}[https://github.com/sstephenson/execjs] to pick the best runtime to evaluate the JavaScript.
 
 === node.js
 
@@ -43,6 +48,19 @@ and the V8 engine, that will be automatically installed by the Ruby Racer.
     group :development do
       gem 'therubyracer'
     end
+
+=== Mozilla Rhino
+
+If you're using JRuby, you can embed the Mozilla Rhino runtime by adding `therubyrhino` to your Gemfile:
+
+    group :development do
+      gem 'therubyrhino'
+    end
+
+=== Microsoft Windows Script Host
+
+{Microsoft Windows Script Host}[http://msdn.microsoft.com/en-us/library/9bbdkx3k.aspx] is available on any Microsoft
+Windows operating systems.
 
 == Usage
 
@@ -103,9 +121,13 @@ be compiled directly to the output directory.
 
 Pull requests are very welcome! Make sure your patches are well tested.
 
-== Authors
+== Author
 
 {Michael Kessler}[http://github.com/netzpirat]
+
+== Contributors
+
+{Aaron Jensen}[https://github.com/aaronjensen]
 
 == Acknowledgment
 

@@ -5,6 +5,10 @@ gemspec
 
 require 'rbconfig'
 
+platform :ruby_18 do
+  gem 'json'
+end
+
 if Config::CONFIG['target_os'] =~ /darwin/i
   gem 'rb-fsevent', '>= 0.3.2'
   gem 'growl',      '~> 1.0.3'
