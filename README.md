@@ -1,22 +1,20 @@
 # Guard::CoffeeScript
 
-Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modified.
-
-- Tested on Ruby 1.8.7 & 1.9.2.
+Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modified. It is tested on Ruby 1.8.7 & 1.9.2.
 
 ## Install
 
-Please be sure to have [guard](http://github.com/guard/guard) installed before continue.
+Please be sure to have [Guard](http://github.com/guard/guard) installed before continue.
 
 Install the gem:
 
     gem install guard-coffeescript
 
-Add it to your Gemfile (inside test group):
+Add it to your `Gemfile`, preferably inside the development group:
 
     gem 'guard-coffeescript'
 
-Add guard definition to your Guardfile by running this command:
+Add guard definition to your `Guardfile` by running this command:
 
     guard init coffeescript
 
@@ -64,11 +62,11 @@ Windows operating systems.
 
 ## Usage
 
-Please read the [Guard usage documentation](http://github.com/guard/guard#readme)
+Please read the [Guard usage documentation](http://github.com/guard/guard#readme).
 
 ## Guardfile
 
-CoffeeScript guard can be adapted to all kind of projects. Please read the
+Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 [Guard documentation](http://github.com/guard/guard#readme) for more information about the Guardfile DSL.
 
 ### Standard ruby gems
@@ -85,7 +83,7 @@ CoffeeScript guard can be adapted to all kind of projects. Please read the
 
 ## Options
 
-There following options can be passed to the CoffeeScript Guard:
+There following options can be passed to Guard::CoffeeScript:
 
     :output => 'javascripts'            # Relative path to the output directory
     :bare => true                       # Compile without the top-level function wrapper
