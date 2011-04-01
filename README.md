@@ -72,14 +72,15 @@ Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 ### Standard ruby gems
 
     guard 'coffeescript' do
-      watch(%r{coffeescripts/.+\.coffee})
+      watch(%r{coffeescripts/(.+\.coffee)})
     end
 
 ### Rails app
 
     guard 'coffeescript', :output => 'public/javascripts/compiled' do
-      watch(%r{app/coffeescripts/.+\.coffee})
+      watch(%r{app/coffeescripts/(.+\.coffee)})
     end
+
 
 ## Options
 
@@ -91,8 +92,7 @@ There following options can be passed to Guard::CoffeeScript:
 
 ### Nested directories
 
-The guard detects by default nested directories and creates these within the output directory. The detection is based on
-the match of the watch regular expression:
+The guard detects by default nested directories and creates these within the output directory. The detection is based on the match of the watch regular expression:
 
 A file
 
@@ -100,7 +100,7 @@ A file
 
 that has been detected by the watch
 
-    watch(%r{app/coffeescripts/.+\.coffee})
+    watch(%r{app/coffeescripts/(.+\.coffee)})
 
 with an output directory of
 
@@ -110,8 +110,10 @@ will be compiled to
 
     public/javascripts/compiled/ui/buttons/toggle_button.js
 
-This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will
-be compiled directly to the output directory.
+
+Note the parenthesis around the `.+\.coffee`. This enables guard-coffeescript to place the full path that was matched inside the parenthesis into the proper output directory.
+
+This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will be compiled directly to the output directory.
 
 ## Development
 
