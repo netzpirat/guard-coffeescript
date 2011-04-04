@@ -10,10 +10,12 @@ module Guard
     autoload :Compiler, 'guard/coffeescript/compiler'
 
     def initialize(watchers = [], options = {})
+      watchers = [] if !watchers
+      watchers << ::Guard::Watcher.new(%r{#{ options.delete(:input) }/(.+\.coffee)}) if options[:input]
+
       super(watchers, {
-        :output => 'javascripts',
-        :bare => false,
-        :shallow => false
+          :bare => false,
+          :shallow => false
       }.merge(options))
     end
 
@@ -34,6 +36,6 @@ module Guard
         guard.run_on_change paths unless paths.empty?
       end
     end
-    
+
   end
 end

@@ -69,30 +69,31 @@ Please read the [Guard usage documentation](http://github.com/guard/guard#readme
 Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 [Guard documentation](http://github.com/guard/guard#readme) for more information about the Guardfile DSL.
 
-### Standard ruby gems
+In addition to the standard configuration, this Guard has a short notation for configure projects with a single input a output
+directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files under the given directory
+and you don't have to specify a watch regular expression.
 
-    guard 'coffeescript' do
-      watch(%r{coffeescripts/(.+\.coffee)})
-    end
+### Standard ruby gem
+
+    guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
 
 ### Rails app
 
-    guard 'coffeescript', :output => 'public/javascripts/compiled' do
-      watch(%r{app/coffeescripts/(.+\.coffee)})
-    end
-
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
 
 ## Options
 
 There following options can be passed to Guard::CoffeeScript:
 
-    :output => 'javascripts'            # Relative path to the output directory
-    :bare => true                       # Compile without the top-level function wrapper
-    :shallow => true                    # Do not create nested output directories
+    :input => 'coffeescripts'           # Relative path to the input directory, default: nil
+    :output => 'javascripts'            # Relative path to the output directory, default: nil
+    :bare => true                       # Compile without the top-level function wrapper, default: false
+    :shallow => true                    # Do not create nested output directories, default: false
 
 ### Nested directories
 
-The guard detects by default nested directories and creates these within the output directory. The detection is based on the match of the watch regular expression:
+The guard detects by default nested directories and creates these within the output directory. The detection is based on the match
+of the watch regular expression:
 
 A file
 
@@ -110,10 +111,37 @@ will be compiled to
 
     public/javascripts/compiled/ui/buttons/toggle_button.js
 
+Note the parenthesis around the `.+\.coffee`. This enables Guard::CoffeeScript to place the full path that was matched inside the
+parenthesis into the proper output directory.
 
-Note the parenthesis around the `.+\.coffee`. This enables guard-coffeescript to place the full path that was matched inside the parenthesis into the proper output directory.
+This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will be compiled
+directly to the output directory.
 
-This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will be compiled directly to the output directory.
+### Multiple source directories
+
+The Guard short notation
+
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
+
+will be internally converted into the standard notation by adding `(.+\.coffee)` to the `input` option string and create a Watcher
+that is equivalent to:
+
+    guard 'coffeescript', :output => 'public/javascripts/compiled' do
+      watch(%r{app/coffeescripts/(.+\.coffee)})
+    end
+
+To add a second source directory that will be compiled to the same output directory, just add another watcher:
+
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled' do
+      watch(%r{lib/coffeescripts/(.+\.coffee)})
+    end
+
+which is equivalent to:
+
+    guard 'coffeescript', :output => 'public/javascripts/compiled' do
+      watch(%r{app/coffeescripts/(.+\.coffee)})
+      watch(%r{lib/coffeescripts/(.+\.coffee)})
+    end
 
 ## Development
 

@@ -11,10 +11,6 @@ describe Guard::CoffeeScript do
     context 'when no options are provided' do
       let(:guard) { Guard::CoffeeScript.new }
 
-      it 'sets a default :output option' do
-        guard.options[:output].should eql 'javascripts'
-      end
-
       it 'sets a default :wrap option' do
         guard.options[:bare].should be_false
       end
@@ -27,16 +23,24 @@ describe Guard::CoffeeScript do
     context 'with other options than the default ones' do
       let(:guard) { Guard::CoffeeScript.new(nil, { :output => 'output_folder', :bare => true, :shallow => true }) }
 
-      it 'sets the provided :output option' do
-        guard.options[:output].should eql 'output_folder'
-      end
- 
       it 'sets the provided :bare option' do
         guard.options[:bare].should be_true
       end
 
       it 'sets the provided :shallow option' do
         guard.options[:shallow].should be_true
+      end
+    end
+
+    context 'with a input option' do
+      let(:guard) { Guard::CoffeeScript.new(nil, { :input => 'app/coffeescripts' }) }
+
+      it 'creates a watcher' do
+        guard.should have(1).watchers
+      end
+
+      it 'watches all *.coffee files' do
+        guard.watchers.first.pattern.should eql %r{app/coffeescripts/(.+\.coffee)}
       end
     end
   end
@@ -69,7 +73,6 @@ describe Guard::CoffeeScript do
     it 'starts the Runner with the cleaned files' do
       Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], [], {
-          :output => 'javascripts',
           :bare => false,
           :shallow => false }).and_return ['a.js']
       guard.run_on_change(['a.coffee', 'b.coffee'])

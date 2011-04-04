@@ -1,3 +1,1 @@
-guard 'coffeescript', :output => 'public/javascripts/compiled' do
-  watch(%r{app/coffeescripts/(.+\.coffee)})
-end
+guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
