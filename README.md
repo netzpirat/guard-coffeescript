@@ -4,10 +4,10 @@ Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modi
 
 ## Install
 
-Please be sure to have [Guard](http://github.com/guard/guard) installed before continue.
+Please be sure to have [Guard](https://github.com/guard/guard) installed before continue.
 
 Install the gem:
-
+https://github
     gem install guard-coffeescript
 
 Add it to your `Gemfile`, preferably inside the development group:
@@ -25,7 +25,7 @@ to install the json or json_pure gem. On Ruby 1.9, json is included in the stand
 
 ## CoffeeScript
 
-Guard::CoffeeScript uses [Ruby CoffeeScript](http://github.com/josh/ruby-coffee-script/) to compile the CoffeeScripts,
+Guard::CoffeeScript uses [Ruby CoffeeScript](https://github.com/josh/ruby-coffee-script/) to compile the CoffeeScripts,
 that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the best runtime to evaluate the JavaScript.
 
 ### node.js
@@ -62,12 +62,12 @@ Windows operating systems.
 
 ## Usage
 
-Please read the [Guard usage documentation](http://github.com/guard/guard#readme).
+Please read the [Guard usage documentation](https://github.com/guard/guard#readme).
 
 ## Guardfile
 
 Guard::CoffeeScript can be adapted to all kind of projects. Please read the
-[Guard documentation](http://github.com/guard/guard#readme) for more information about the Guardfile DSL.
+[Guard documentation](https://github.com/guard/guard#readme) for more information about the Guardfile DSL.
 
 In addition to the standard configuration, this Guard has a short notation for configure projects with a single input a output
 directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files under the given directory
@@ -145,8 +145,8 @@ which is equivalent to:
 
 ## Development
 
-- Source hosted at [GitHub](http://github.com/netzpirat/guard-coffeescript)
-- Report issues/Questions/Feature requests on [GitHub Issues](http://github.com/netzpirat/guard-coffeescript/issues)
+- Source hosted at [GitHub](https://github.com/netzpirat/guard-coffeescript)
+- Report issues/Questions/Feature requests on [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues)
 
 Pull requests are very welcome! Make sure your patches are well tested.
 
@@ -155,7 +155,7 @@ Pull requests are very welcome! Make sure your patches are well tested.
 The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice pice of software
 that is so easy to extend, one *has* to make a plugin for it!
 
-All the authors of the numerous [Guards](http://github.com/guard) avaiable for making the Guard ecosystem
+All the authors of the numerous [Guards](https://github.com/guard) avaiable for making the Guard ecosystem
 so much growing and comprehensive.
 
 ## License
