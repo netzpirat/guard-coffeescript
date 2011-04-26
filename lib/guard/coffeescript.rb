@@ -7,7 +7,6 @@ module Guard
 
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
-    autoload :Compiler, 'guard/coffeescript/compiler'
 
     def initialize(watchers = [], options = {})
       watchers = [] if !watchers
