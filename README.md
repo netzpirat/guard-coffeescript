@@ -89,6 +89,7 @@ There following options can be passed to Guard::CoffeeScript:
     :output => 'javascripts'            # Relative path to the output directory, default: nil
     :bare => true                       # Compile without the top-level function wrapper, default: false
     :shallow => true                    # Do not create nested output directories, default: false
+    :hide_success => true               # Disable successful compilation messages, default: false
 
 ### Nested directories
 
@@ -149,6 +150,10 @@ which is equivalent to:
 - Report issues/Questions/Feature requests on [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues)
 
 Pull requests are very welcome! Make sure your patches are well tested.
+
+## Contributors
+
+* [Patrick Ewing](https://github.com/hoverbird)
 
 ## Acknowledgment
 
