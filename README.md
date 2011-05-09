@@ -20,8 +20,8 @@ Add guard definition to your `Guardfile` by running this command:
 
 ## JSON
 
-The json library is also required but is not explicitly stated as a gem dependency. If you're on Ruby 1.8 you'll need
-to install the json or json_pure gem. On Ruby 1.9, json is included in the standard library.
+The JSON library is also required but is not explicitly stated as a gem dependency. If you're on Ruby 1.8 you'll need
+to install the json or json_pure gem. On Ruby 1.9, JSON is included in the standard library.
 
 ## CoffeeScript
 
@@ -115,7 +115,7 @@ will be compiled to
 Note the parenthesis around the `.+\.coffee`. This enables Guard::CoffeeScript to place the full path that was matched inside the
 parenthesis into the proper output directory.
 
-This behaviour can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will be compiled
+This behavior can be switched off by passing the option `:shallow => true` to the guard, so that all JavaScripts will be compiled
 directly to the output directory.
 
 ### Multiple source directories
@@ -160,7 +160,7 @@ Pull requests are very welcome! Make sure your patches are well tested.
 The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice pice of software
 that is so easy to extend, one *has* to make a plugin for it!
 
-All the authors of the numerous [Guards](https://github.com/guard) avaiable for making the Guard ecosystem
+All the authors of the numerous [Guards](https://github.com/guard) available for making the Guard ecosystem
 so much growing and comprehensive.
 
 ## License
