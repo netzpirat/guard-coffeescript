@@ -3,7 +3,8 @@
 ![travis-ci](http://travis-ci.org/netzpirat/guard-coffeescript.png)
 
 Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modified.
-Tested on Ruby 1.8.7, 1.9.2, JRuby & Rubinius.
+
+Tested on MRI Ruby 1.8.6, 1.8.7, 1.9.2 and the latest versions of JRuby & Rubinius.
 
 ## Install
 
