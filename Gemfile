@@ -18,3 +18,11 @@ if Config::CONFIG['target_os'] =~ /linux/i
   gem 'libnotify',  '~> 0.3.0'
 end
 
+# The JS runtime is needed because ExecJS searches one when the module is loaded.
+# This breaks travis builds even when the compiler is stubbed.
+
+if defined?(JRUBY_VERSION)
+  gem 'therubyrhino'
+else
+  gem 'therubyracer'
+end
