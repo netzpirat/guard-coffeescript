@@ -10,7 +10,7 @@ Tested on Ruby 1.8.7, 1.9.2, JRuby & Rubinius.
 Please be sure to have [Guard](https://github.com/guard/guard) installed before continue.
 
 Install the gem:
-https://github
+
     gem install guard-coffeescript
 
 Add it to your `Gemfile`, preferably inside the development group:
