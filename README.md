@@ -159,8 +159,9 @@ Pull requests are very welcome! Make sure your patches are well tested.
 
 * [Aaron Jensen](https://github.com/aaronjensen)
 * [Patrick Ewing](https://github.com/hoverbird)
+* [Andrew Assarattanakul](https://github.com/vizjerai)
 
-## Acknowledgment
+ ## Acknowledgment
 
 The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice pice of software
 that is so easy to extend, one *has* to make a plugin for it!
