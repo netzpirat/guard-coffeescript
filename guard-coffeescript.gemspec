@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'guard', '~> 0.3.0'
   s.add_dependency 'coffee-script', '~> 2.2.0'
 
-  s.add_development_dependency 'bundler',     '~> 1.0.11'
-  s.add_development_dependency 'guard-rspec', '~> 0.2.0'
+  s.add_development_dependency 'bundler',     '~> 1.0.13'
+  s.add_development_dependency 'guard-rspec', '~> 0.3.1'
   s.add_development_dependency 'rspec',       '~> 2.5.0'
 
   s.files        = Dir.glob('{lib}/**/*') + %w[LICENSE README.md]
