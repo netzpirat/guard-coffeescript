@@ -30,7 +30,7 @@ module Guard
 
     private
 
-    def notify changed_files
+    def notify(changed_files)
       ::Guard.guards.each do |guard|
         paths = Watcher.match_files(guard, changed_files)
         guard.run_on_change paths unless paths.empty?
