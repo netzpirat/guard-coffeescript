@@ -5,6 +5,7 @@ require 'guard/watcher'
 module Guard
   class CoffeeScript < Guard
 
+    autoload :Formatter, 'guard/coffeescript/formatter'
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
 

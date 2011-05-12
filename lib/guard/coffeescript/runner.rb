@@ -12,14 +12,14 @@ module Guard
 
           changed_files
         rescue ::CoffeeScript::EngineError => e
-          ::Guard::UI.error "CoffeeScript engine error: " + e.message
+          Formatter.error("CoffeeScript engine error: " + e.message)
         end
 
       private
 
         def notify_start(files, options)
           message = options[:message] || "Compile #{ files.join(', ') }"
-          ::Guard::UI.info message, :reset => true
+          Formatter.info(message, :reset => true)
         end
 
         def compile_files(files, options, watchers)
@@ -35,7 +35,7 @@ module Guard
               rescue ::CoffeeScript::CompilationError => e
                 error_message = file + ': ' + e.message
                 errors << error_message
-                ::Guard::UI.error(error_message)
+                Formatter.error(error_message)
               end
             end
           end
@@ -76,11 +76,11 @@ module Guard
 
         def notify_result(changed_files, errors, options = {})
           if !errors.empty?
-            ::Guard::Notifier.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed)
+            Formatter.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed)
           elsif !options[:hide_success]
             message = "Successfully generated #{ changed_files.join(', ') }"
-            ::Guard::UI.info(message)
-            ::Guard::Notifier.notify(message, :title => 'CoffeeScript results')
+            Formatter.success(message)
+            Formatter.notify(message, :title => 'CoffeeScript results')
           end
         end
 
