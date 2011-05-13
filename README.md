@@ -4,7 +4,7 @@
 
 Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modified.
 
-Tested on MRI Ruby 1.8.6, 1.8.7, 1.9.2 and the latest versions of JRuby & Rubinius.
+Tested on MRI Ruby 1.8.7, 1.9.2 and the latest versions of JRuby & Rubinius.
 
 ## Install
 
