@@ -11,8 +11,8 @@ module Guard
           notify_result(changed_files, errors, options)
 
           changed_files
-        rescue ::CoffeeScript::EngineError => e
-          Formatter.error("CoffeeScript engine error: " + e.message)
+        rescue ExecJS::RuntimeError => e
+          Formatter.error("ExecJS engine error: " + e.message)
         end
 
       private
@@ -32,8 +32,8 @@ module Guard
               begin
                 content = compile(file, options)
                 changed_files << process_compile_result(content, file, directory)
-              rescue ::CoffeeScript::CompilationError => e
-                error_message = file + ': ' + e.message
+              rescue ExecJS::ProgramError => e
+                error_message = file + ': ' + e.message.to_s
                 errors << error_message
                 Formatter.error(error_message)
               end
