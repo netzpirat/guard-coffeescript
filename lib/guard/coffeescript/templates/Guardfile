@@ -1,1 +1,1 @@
-guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
+guard 'coffeescript', :input => 'app/assets/javascripts'

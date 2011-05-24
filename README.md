@@ -77,20 +77,20 @@ In addition to the standard configuration, this Guard has a short notation for c
 directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files under the given directory
 and you don't have to specify a watch regular expression.
 
-### Standard ruby gem
+### Standard Ruby gem
 
     guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
 
-### Rails app
+### Rails 3.1 app
 
-    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
+    guard 'coffeescript', :input => 'app/assets/javascripts'
 
 ## Options
 
 There following options can be passed to Guard::CoffeeScript:
 
     :input => 'coffeescripts'           # Relative path to the input directory, default: nil
-    :output => 'javascripts'            # Relative path to the output directory, default: nil
+    :output => 'javascripts'            # Relative path to the output directory, default: input directory
     :bare => true                       # Compile without the top-level function wrapper, default: false
     :shallow => true                    # Do not create nested output directories, default: false
     :hide_success => true               # Disable successful compilation messages, default: false

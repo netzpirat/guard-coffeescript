@@ -50,6 +50,20 @@ describe Guard::CoffeeScript do
       it 'watches all *.coffee files' do
         guard.watchers.first.pattern.should eql %r{app/coffeescripts/(.+\.coffee)}
       end
+
+      context 'without an output option' do
+        it 'sets the output directory to the input directory' do
+          guard.options[:output].should eql 'app/coffeescripts'
+        end
+      end
+
+      context 'with an output option' do
+        let(:guard) { Guard::CoffeeScript.new(nil, { :input => 'app/coffeescripts', :output => 'public/javascripts' }) }
+
+        it 'keeps the output directory' do
+          guard.options[:output].should eql 'public/javascripts'
+        end
+      end
     end
   end
 

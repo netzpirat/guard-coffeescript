@@ -11,13 +11,18 @@ module Guard
 
     def initialize(watchers = [], options = {})
       watchers = [] if !watchers
-      watchers << ::Guard::Watcher.new(%r{#{ options.delete(:input) }/(.+\.coffee)}) if options[:input]
-
-      super(watchers, {
+      defaults = {
           :bare => false,
           :shallow => false,
           :hide_success => false,
-      }.merge(options))
+      }
+
+      if options[:input]
+        defaults.merge!({ :output => options[:input] })
+        watchers << ::Guard::Watcher.new(%r{#{ options.delete(:input) }/(.+\.coffee)})
+      end
+
+      super(watchers, defaults.merge(options))
     end
 
     def run_all
