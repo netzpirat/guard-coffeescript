@@ -49,7 +49,7 @@ module Guard
 
         def process_compile_result(content, file, directory)
           FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
-          filename = File.join(directory, File.basename(file.gsub(/coffee$/, 'js')))
+          filename = File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
           File.open(File.expand_path(filename), 'w') { |f| f.write(content) }
 
           filename

@@ -20,10 +20,16 @@ describe Guard::CoffeeScript::Runner do
     context 'without a nested directory' do
       let(:watcher) { Guard::Watcher.new(%r{src/.+\.coffee}) }
 
-      it 'compiles the CoffeeScripts to the output without creating nested directories' do
+      it 'compiles the CoffeeScripts to the output and replace .coffee with .js' do
         FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/target")
         File.should_receive(:open).with("#{ @project_path }/target/a.js", 'w')
         runner.run(['src/a.coffee'], [watcher], { :output => 'target' })
+      end
+
+      it 'compiles the CoffeeScripts to the output and replace .js.coffee with .js' do
+        FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/target")
+        File.should_receive(:open).with("#{ @project_path }/target/a.js", 'w')
+        runner.run(['src/a.js.coffee'], [watcher], { :output => 'target' })
       end
     end
 
