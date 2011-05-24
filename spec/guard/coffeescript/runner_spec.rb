@@ -17,7 +17,7 @@ describe Guard::CoffeeScript::Runner do
       runner.run(['a.coffee', 'b.coffee'], [])
     end
 
-    context 'without a ' do
+    context 'without a nested directory' do
       let(:watcher) { Guard::Watcher.new(%r{src/.+\.coffee}) }
 
       it 'compiles the CoffeeScripts to the output without creating nested directories' do
