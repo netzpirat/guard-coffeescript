@@ -19,7 +19,7 @@ module Guard
 
       if options[:input]
         defaults.merge!({ :output => options[:input] })
-        watchers << ::Guard::Watcher.new(%r{#{ options.delete(:input) }/(.+\.coffee)})
+        watchers << ::Guard::Watcher.new(%r{^#{ options.delete(:input) }/(.+\.coffee)$})
       end
 
       super(watchers, defaults.merge(options))

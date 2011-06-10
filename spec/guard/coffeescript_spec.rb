@@ -48,7 +48,7 @@ describe Guard::CoffeeScript do
       end
 
       it 'watches all *.coffee files' do
-        guard.watchers.first.pattern.should eql %r{app/coffeescripts/(.+\.coffee)}
+        guard.watchers.first.pattern.should eql %r{^app/coffeescripts/(.+\.coffee)$}
       end
 
       context 'without an output option' do
