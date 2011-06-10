@@ -194,7 +194,7 @@ end
 ## Development
 
 - Source hosted at [GitHub](https://github.com/netzpirat/guard-coffeescript)
-- Report issues and feature requests on [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues)
+- Report issues and feature requests to [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues)
 
 Pull requests are very welcome! Make sure your patches are well tested.
 
@@ -206,7 +206,7 @@ For questions please join us on our [Google group](http://groups.google.com/grou
 * [Andrew Assarattanakul](https://github.com/vizjerai)
 * [Patrick Ewing](https://github.com/hoverbird)
 
- ## Acknowledgment
+## Acknowledgment
 
 The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice pice of software
 that is so easy to extend, one *has* to make a plugin for it!
