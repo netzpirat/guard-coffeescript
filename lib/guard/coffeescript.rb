@@ -30,8 +30,10 @@ module Guard
     end
 
     def run_on_change(paths)
-      changed_files = Runner.run(Inspector.clean(paths), watchers, options)
+      changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
       notify changed_files
+      
+      success
     end
 
     private

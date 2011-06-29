@@ -97,12 +97,12 @@ describe Guard::CoffeeScript do
       Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], [], {
           :bare => false,
           :shallow => false,
-          :hide_success => false }).and_return ['a.js']
+          :hide_success => false }).and_return [['a.js'], true]
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
 
     it 'notifies the other guards about the changed files' do
-      Guard::CoffeeScript::Runner.should_receive(:run).and_return ['a.js', 'b.js']
+      Guard::CoffeeScript::Runner.should_receive(:run).and_return [['a.js', 'b.js'], true]
       guard.should_receive(:notify).with(['a.js', 'b.js'])
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
