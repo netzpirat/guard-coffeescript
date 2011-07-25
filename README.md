@@ -106,21 +106,39 @@ guard 'coffeescript', :input => 'app/assets/javascripts'
 There following options can be passed to Guard::CoffeeScript:
 
 ```ruby
-:input => 'coffeescripts'           # Relative path to the input directory
+:input => 'coffeescripts'           # Relative path to the input directory.
                                     # default: nil
 
-:output => 'javascripts'            # Relative path to the output directory
+:output => 'javascripts'            # Relative path to the output directory.
                                     # default: the path given with the :input option
 
-:bare => true                       # Compile without the top-level function wrapper
+:bare => true                       # Compile without the top-level function wrapper.
+                                    # Provide either a boolean value or an Array of filenames.
                                     # default: false
 
-:shallow => true                    # Do not create nested output directories
+:shallow => true                    # Do not create nested output directories.
                                     # default: false
 
-:hide_success => true               # Disable successful compilation messages
+:hide_success => true               # Disable successful compilation messages.
                                     # default: false
 ```
+
+### Selective bare option
+
+The `:bare` option can take a boolean value that indicates if all scripts should be compiled without the top-level function wrapper.
+
+```ruby
+:bare => true
+```
+
+But you can also pass an Array of filenames that should be compiled without the top-level function wrapper. The path of the file to compile is
+ignored, so the list of filenames should not contain any path information:
+
+```ruby
+:bare => %w{ a.coffee b.coffee }
+```
+
+In the above example, all `a.coffee` and `b.coffee` files will be compiled with option `:bare => true` and all other files with option `:bare => false`.
 
 ### Nested directories
 
@@ -204,6 +222,7 @@ For questions please join us on our [Google group](http://groups.google.com/grou
 
 * [Aaron Jensen](https://github.com/aaronjensen)
 * [Andrew Assarattanakul](https://github.com/vizjerai)
+* [Jeremy Raines](https://github.com/jraines)
 * [Patrick Ewing](https://github.com/hoverbird)
 
 ## Acknowledgment
