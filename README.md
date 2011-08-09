@@ -107,6 +107,7 @@ There following options can be passed to Guard::CoffeeScript:
 
 ```ruby
 :input => 'coffeescripts'           # Relative path to the input directory.
+                                    # A suffix `/(.+\.coffee)` will be added to this option.
                                     # default: nil
 
 :output => 'javascripts'            # Relative path to the output directory.
@@ -183,7 +184,7 @@ The Guard short notation
 guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
 ```
 
-will be internally converted into the standard notation by adding `(.+\.coffee)` to the `input` option string and create a Watcher
+will be internally converted into the standard notation by adding `/(.+\.coffee)` to the `input` option string and create a Watcher
 that is equivalent to:
 
 ```ruby
