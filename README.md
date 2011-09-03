@@ -41,20 +41,17 @@ to install the `json` or `json_pure` gem. On Ruby 1.9, JSON is included in the s
 Guard::CoffeeScript uses [Ruby CoffeeScript](https://github.com/josh/ruby-coffee-script/) to compile the CoffeeScripts,
 that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the best runtime to evaluate the JavaScript.
 
-### node.js
+## Choose a runtime
+
+### CoffeeScript executable on node.js
 
 Please refer to the [CoffeeScript documentation](http://jashkenas.github.com/coffee-script/) for more information about
-how to install the latest CoffeeScript version on node.js.
+how to install the latest CoffeeScript version on [node.js](http://nodejs.org/).
 
-### JavaScript Core
+### V8 JavaScript Engine
 
-JavaScript Core is only available on Mac OS X. To use JavaScript Core you don't have to install anything, because
-JavaScript Core is packaged with Mac OS X.
-
-### V8
-
-To use CoffeeScript on V8, simple add `therubyracer` to your `Gemfile`. The Ruby Racer acts as a bridge between Ruby
-and the V8 engine, that will be automatically installed by the Ruby Racer.
+To use the [V8 JavaScript Engine](http://code.google.com/p/v8/), simple add `therubyracer` to your `Gemfile`.
+The Ruby Racer acts as a bridge between Ruby and the V8 engine, that will be automatically installed by the Ruby Racer.
 
 ```ruby
 group :development do
@@ -62,15 +59,41 @@ group :development do
 end
 ```
 
+Another alternative is [Mustang](https://github.com/nu7hatch/mustang), a Ruby proxy library for the awesome Google V8
+JavaScript engine. Just add `mustang` to your `Gemfile`:
+
+```ruby
+group :development do
+  gem 'mustang'
+end
+```
+
+### Mozilla SpiderMonkey
+
+To use [Mozilla SpiderMonkey](https://developer.mozilla.org/en/SpiderMonkey), simple add `johnson` to your `Gemfile`.
+Johnson embeds the Mozilla SpiderMonkey JavaScript runtime as a C extension.
+
+```ruby
+group :development do
+  gem 'johnson'
+end
+```
+
 ### Mozilla Rhino
 
-If you're using JRuby, you can embed the Mozilla Rhino runtime by adding `therubyrhino` to your `Gemfile`:
+If you're using JRuby, you can embed the [Mozilla Rhino](http://www.mozilla.org/rhino/) runtime by adding `therubyrhino`
+to your `Gemfile`:
 
 ```ruby
 group :development do
   gem 'therubyrhino'
 end
 ```
+
+### Apple JavaScriptCore
+
+JavaScriptCore is only available on Mac OS X. To use JavaScript Core you don't have to install anything, because
+JavaScriptCore is packaged with Mac OS X.
 
 ### Microsoft Windows Script Host
 
