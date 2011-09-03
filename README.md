@@ -111,7 +111,7 @@ Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 
 ### Standard Ruby gem
 
-In a custom Ruby project you want to configure your `:input` and `:output` directories.
+In a custom Ruby project you want to configure your input and output directories.
 
 ```ruby
 guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
