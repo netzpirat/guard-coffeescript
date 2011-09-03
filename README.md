@@ -2,11 +2,12 @@
 
 ![travis-ci](http://travis-ci.org/netzpirat/guard-coffeescript.png)
 
-Guard::CoffeeScript compiles you CoffeeScripts automatically when files are modified.
+Guard::CoffeeScript compiles or validates your CoffeeScripts automatically when files are modified.
 
 Tested on MRI Ruby 1.8.7, 1.9.2 and the latest versions of JRuby & Rubinius.
 
-If you have any questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard` (irc.freenode.net).
+If you have any questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard`
+(irc.freenode.net).
 
 ## Install
 
@@ -85,20 +86,44 @@ Please read the [Guard usage documentation](https://github.com/guard/guard#readm
 Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 [Guard documentation](https://github.com/guard/guard#readme) for more information about the Guardfile DSL.
 
-In addition to the standard configuration, this Guard has a short notation for configure projects with a single input a output
-directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files under the given directory
-and you don't have to specify a watch regular expression.
-
 ### Standard Ruby gem
+
+In a custom Ruby project you want to configure your `:input` and `:output` directories.
 
 ```ruby
 guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
 ```
 
-### Rails 3.1 app
+If your output directory is the same as the input directory, you can simply skip it:
 
 ```ruby
-guard 'coffeescript', :input => 'app/assets/javascripts'
+guard 'coffeescript', :input => 'javascripts'
+```
+
+### Rails app with the asset pipeline
+
+With the introduction of the [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) in Rails 3.1 there is
+no need to compile your CoffeeScripts with this Guard. However if you like to have instant validation feedback
+(preferably with a Growl notification) directly after you save a change, then you may want to skip the generation
+of the output file:
+
+```ruby
+guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true
+```
+
+This give you a faster compilation feedback compared to making a subsequent request to your Rails application. If you
+just want to be notified when an error occurs you can hide the success compilation message:
+
+```ruby
+guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true, :hide_success => true
+```
+
+### Rails app without the asset pipeline
+
+Without the asset pipeline you just define an input and output directory like within a normal Ruby project:
+
+```ruby
+guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts',
 ```
 
 ## Options
@@ -113,6 +138,9 @@ There following options can be passed to Guard::CoffeeScript:
 :output => 'javascripts'            # Relative path to the output directory.
                                     # default: the path given with the :input option
 
+:noop => true                       # No operation: do not write an output file.
+                                    # default: false
+
 :bare => true                       # Compile without the top-level function wrapper.
                                     # Provide either a boolean value or an Array of filenames.
                                     # default: false
@@ -124,27 +152,39 @@ There following options can be passed to Guard::CoffeeScript:
                                     # default: false
 ```
 
+### Output short notation
+
+In addition to the standard configuration, this Guard has a short notation for configure projects with a single input
+and output directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files
+under the given directory and you don't have to specify a watch regular expression.
+
+```ruby
+guard 'coffeescript', :input => 'javascripts'
+```
+
 ### Selective bare option
 
-The `:bare` option can take a boolean value that indicates if all scripts should be compiled without the top-level function wrapper.
+The `:bare` option can take a boolean value that indicates if all scripts should be compiled without the top-level
+function wrapper.
 
 ```ruby
 :bare => true
 ```
 
-But you can also pass an Array of filenames that should be compiled without the top-level function wrapper. The path of the file to compile is
-ignored, so the list of filenames should not contain any path information:
+But you can also pass an Array of filenames that should be compiled without the top-level function wrapper. The path of
+the file to compile is ignored, so the list of filenames should not contain any path information:
 
 ```ruby
 :bare => %w{ a.coffee b.coffee }
 ```
 
-In the above example, all `a.coffee` and `b.coffee` files will be compiled with option `:bare => true` and all other files with option `:bare => false`.
+In the above example, all `a.coffee` and `b.coffee` files will be compiled with option `:bare => true` and all other
+files with option `:bare => false`.
 
 ### Nested directories
 
-The Guard detects by default nested directories and creates these within the output directory. The detection is based on the match
-of the watch regular expression:
+The Guard detects by default nested directories and creates these within the output directory. The detection is based on
+the match of the watch regular expression:
 
 A file
 
@@ -170,11 +210,11 @@ will be compiled to
 public/javascripts/compiled/ui/buttons/toggle_button.js
 ```
 
-Note the parenthesis around the `.+\.coffee`. This enables Guard::CoffeeScript to place the full path that was matched inside the
-parenthesis into the proper output directory.
+Note the parenthesis around the `.+\.coffee`. This enables Guard::CoffeeScript to place the full path that was matched
+inside the parenthesis into the proper output directory.
 
-This behavior can be switched off by passing the option `:shallow => true` to the Guard, so that all JavaScripts will be compiled
-directly to the output directory.
+This behavior can be switched off by passing the option `:shallow => true` to the Guard, so that all JavaScripts will be
+compiled directly to the output directory.
 
 ### Multiple source directories
 
@@ -184,8 +224,8 @@ The Guard short notation
 guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
 ```
 
-will be internally converted into the standard notation by adding `/(.+\.coffee)` to the `input` option string and create a Watcher
-that is equivalent to:
+will be internally converted into the standard notation by adding `/(.+\.coffee)` to the `input` option string and
+create a Watcher that is equivalent to:
 
 ```ruby
 guard 'coffeescript', :output => 'public/javascripts/compiled' do
@@ -217,7 +257,8 @@ end
 
 Pull requests are very welcome! Make sure your patches are well tested.
 
-For questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard` (irc.freenode.net).
+For questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard`
+(irc.freenode.net).
 
 ## Contributors
 

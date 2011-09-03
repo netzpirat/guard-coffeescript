@@ -15,6 +15,7 @@ module Guard
           :bare => false,
           :shallow => false,
           :hide_success => false,
+          :noop => false
       }
 
       if options[:input]
@@ -32,7 +33,7 @@ module Guard
     def run_on_change(paths)
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
       notify changed_files
-      
+
       success
     end
 

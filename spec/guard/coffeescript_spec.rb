@@ -22,10 +22,14 @@ describe Guard::CoffeeScript do
       it 'sets a default :hide_success option' do
         guard.options[:hide_success].should be_false
       end
+
+      it 'sets a default :noop option' do
+        guard.options[:noop].should be_false
+      end
     end
 
     context 'with other options than the default ones' do
-      let(:guard) { Guard::CoffeeScript.new(nil, { :output => 'output_folder', :bare => true, :shallow => true, :hide_success => true }) }
+      let(:guard) { Guard::CoffeeScript.new(nil, { :output => 'output_folder', :bare => true, :shallow => true, :hide_success => true, :noop => true }) }
 
       it 'sets the provided :bare option' do
         guard.options[:bare].should be_true
@@ -37,6 +41,10 @@ describe Guard::CoffeeScript do
 
       it 'sets the provided :hide_success option' do
         guard.options[:hide_success].should be_true
+      end
+
+      it 'sets a provided :noop option' do
+        guard.options[:noop].should be_true
       end
     end
 
@@ -97,7 +105,8 @@ describe Guard::CoffeeScript do
       Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], [], {
           :bare => false,
           :shallow => false,
-          :hide_success => false }).and_return [['a.js'], true]
+          :hide_success => false,
+          :noop => false}).and_return [['a.js'], true]
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
 

@@ -19,7 +19,7 @@ module Guard
       private
 
         def notify_start(files, options)
-          message = options[:message] || "Compile #{ files.join(', ') }"
+          message = options[:message] || (options[:noop] ? 'Verify ' : 'Compile ') + files.join(', ')
           Formatter.info(message, :reset => true)
         end
 
@@ -32,7 +32,7 @@ module Guard
             scripts.each do |file|
               begin
                 content = compile(file, options)
-                changed_files << process_compile_result(content, file, directory)
+                changed_files << process_compile_result(content, file, directory, options)
               rescue ExecJS::ProgramError => e
                 error_message = file + ': ' + e.message.to_s
                 errors << error_message
@@ -58,10 +58,10 @@ module Guard
           file_options
         end
 
-        def process_compile_result(content, file, directory)
-          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
+        def process_compile_result(content, file, directory, options)
+          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory) && !options[:noop]
           filename = File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
-          File.open(File.expand_path(filename), 'w') { |f| f.write(content) }
+          File.open(File.expand_path(filename), 'w') { |f| f.write(content) } if !options[:noop]
 
           filename
         end
@@ -89,7 +89,7 @@ module Guard
           if !errors.empty?
             Formatter.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed, :priority => 2)
           elsif !options[:hide_success]
-            message = "Successfully generated #{ changed_files.join(', ') }"
+            message = "Successfully #{ options[:noop] ? 'verified' : 'generated' } #{ changed_files.join(', ') }"
             Formatter.success(message)
             Formatter.notify(message, :title => 'CoffeeScript results')
           end
