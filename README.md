@@ -104,8 +104,8 @@ guard 'coffeescript', :input => 'javascripts'
 
 With the introduction of the [asset pipeline](http://guides.rubyonrails.org/asset_pipeline.html) in Rails 3.1 there is
 no need to compile your CoffeeScripts with this Guard. However if you like to have instant validation feedback
-(preferably with a Growl notification) directly after you save a change, then you may want to skip the generation
-of the output file:
+(preferably with a Growl notification) directly after you save a change, then you may want still use this Guard and just
+skip the generation of the output file:
 
 ```ruby
 guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true
