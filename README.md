@@ -92,8 +92,9 @@ end
 
 ### Apple JavaScriptCore
 
-JavaScriptCore is only available on Mac OS X. To use JavaScript Core you don't have to install anything, because
-JavaScriptCore is packaged with Mac OS X.
+[JavaScriptCore](http://developer.apple.com/library/mac/#documentation/Carbon/Reference/WebKit_JavaScriptCore_Ref/index.html)
+is Safari's Nitro JavaScript Engine and only usable on Mac OS X. You don't have to install anything, because
+JavaScriptCore is already packaged with Mac OS X.
 
 ### Microsoft Windows Script Host
 
