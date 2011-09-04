@@ -39,12 +39,21 @@ to install the `json` or `json_pure` gem. On Ruby 1.9, JSON is included in the s
 Guard::CoffeeScript uses [Ruby CoffeeScript](https://github.com/josh/ruby-coffee-script/) to compile the CoffeeScripts,
 that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the best runtime to evaluate the JavaScript.
 
-## Choose a runtime
+* With CRuby you want to use a V8 JavaScript Engine or Mozilla SpiderMonkey.
+* With JRuby you want to use the Mozilla Rhino.
+* On Mac OS X you want to use Apple JavaScriptCore
+* On Linux or as a node.js developer you want to use Node.js (V8)
+* On Windows you want to use Microsoft Windows Script Host
 
-### CoffeeScript executable on node.js
+## JavaScript runtimes
 
-Please refer to the [CoffeeScript documentation](http://jashkenas.github.com/coffee-script/) for more information about
-how to install the latest CoffeeScript version on [node.js](http://nodejs.org/).
+The following sections gives you a short overview of the available JavaScript runtimes and how to install it.
+
+### Node.js (V8)
+
+You can install [node.js](http://nodejs.org/) and use its V8 engine. On OS X you may want to install it with
+[Homebrew](http://mxcl.github.com/homebrew/), on Linux with your package manager and on Windows you have to download and
+install the [executable](http://www.nodejs.org/#download).
 
 ### V8 JavaScript Engine
 
@@ -108,9 +117,9 @@ Please read the [Guard usage documentation](https://github.com/guard/guard#readm
 Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 [Guard documentation](https://github.com/guard/guard#readme) for more information about the Guardfile DSL.
 
-### Standard Ruby gem
+### Ruby project
 
-In a custom Ruby project you want to configure your input and output directories.
+In a Ruby project you want to configure your input and output directories.
 
 ```ruby
 guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
@@ -145,7 +154,7 @@ guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true, :hide_s
 Without the asset pipeline you just define an input and output directory like within a normal Ruby project:
 
 ```ruby
-guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts',
+guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts'
 ```
 
 ## Options
