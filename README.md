@@ -41,9 +41,9 @@ that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the be
 
 * With CRuby you want to use a V8 JavaScript Engine or Mozilla SpiderMonkey.
 * With JRuby you want to use the Mozilla Rhino.
-* On Mac OS X you want to use Apple JavaScriptCore
-* On Linux or as a node.js developer you want to use Node.js (V8)
-* On Windows you want to use Microsoft Windows Script Host
+* On Mac OS X you want to use Apple JavaScriptCore.
+* On Linux or as a node.js developer you want to use Node.js (V8).
+* On Windows you want to use Microsoft Windows Script Host.
 
 ## JavaScript runtimes
 
