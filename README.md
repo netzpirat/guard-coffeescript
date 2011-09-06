@@ -1,4 +1,4 @@
-# Guard::CoffeeScript [![Build Status](http://travis-ci.org/netzpirat/guard-coffeescript.png)](http://travis-ci.org/netzpirat/guard-coffeescript)
+# Guard::CoffeeScript [![Build Status](https://secure.travis-ci.org/netzpirat/guard-coffeescript.png)](http://travis-ci.org/netzpirat/guard-coffeescript)
 
 Guard::CoffeeScript compiles or validates your CoffeeScripts automatically when files are modified.
 
