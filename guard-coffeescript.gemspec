@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'guard/coffeescript'
+require 'guard/coffeescript/version'
 
 Gem::Specification.new do |s|
   s.name        = 'guard-coffeescript'
-  s.version     = Guard::CoffeeScript::VERSION
+  s.version     = Guard::CoffeeScriptVersion::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Michael Kessler']
   s.email       = ['michi@netzpiraten.ch']

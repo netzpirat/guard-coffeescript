@@ -13,12 +13,6 @@ describe Guard::CoffeeScript do
     guard.stub(:notify)
   end
 
-  describe 'VERSION' do
-    it 'defines the version' do
-      Guard::CoffeeScript::VERSION.should match /\d+.\d+.\d+/
-    end
-  end
-
   describe '#initialize' do
     context 'when no options are provided' do
       it 'sets a default :wrap option' do

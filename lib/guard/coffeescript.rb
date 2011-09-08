@@ -9,9 +9,6 @@ module Guard
   #
   class CoffeeScript < Guard
 
-    # Guard::CoffeeScript version that is used for the Gem specification
-    VERSION = '0.4.0'
-
     autoload :Formatter, 'guard/coffeescript/formatter'
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
