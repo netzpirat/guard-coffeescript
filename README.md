@@ -237,7 +237,7 @@ which is equivalent to:
 
 ## Development
 
-- Documentation hosted at [RubyDoc](http://rubydoc.info/gems/guard-coffeescript/file/README.md).
+- Documentation hosted at [RubyDoc](http://rubydoc.info/gems/guard-coffeescript/frames).
 - Source hosted at [GitHub](https://github.com/netzpirat/guard-coffeescript).
 - Report issues and feature requests to [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues).
 
