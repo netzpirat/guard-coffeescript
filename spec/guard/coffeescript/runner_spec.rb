@@ -2,27 +2,31 @@ require 'spec_helper'
 
 describe Guard::CoffeeScript::Runner do
   describe '#run' do
-    let(:runner)  { Guard::CoffeeScript::Runner }
+
+    let(:runner) { Guard::CoffeeScript::Runner }
     let(:watcher) { Guard::Watcher.new('^(.*)\.coffee') }
+    let(:formatter) { Guard::CoffeeScript::Formatter }
 
     before do
       runner.stub(:compile).and_return ''
+      formatter.stub(:notify)
+
       FileUtils.stub(:mkdir_p)
       File.stub(:open)
     end
 
     context 'without the :noop option' do
       it 'shows a start notification' do
-        ::Guard::CoffeeScript::Formatter.should_receive(:info).once.with('Compile a.coffee, b.coffee', { :reset => true })
-        ::Guard::CoffeeScript::Formatter.should_receive(:success).once.with('Successfully generated ')
+        formatter.should_receive(:info).once.with('Compile a.coffee, b.coffee', { :reset => true })
+        formatter.should_receive(:success).once.with('Successfully generated ')
         runner.run(['a.coffee', 'b.coffee'], [])
       end
     end
 
     context 'with the :noop option' do
       it 'shows a start notification' do
-        ::Guard::CoffeeScript::Formatter.should_receive(:info).once.with('Verify a.coffee, b.coffee', { :reset => true })
-        ::Guard::CoffeeScript::Formatter.should_receive(:success).once.with('Successfully verified ')
+        formatter.should_receive(:info).once.with('Verify a.coffee, b.coffee', { :reset => true })
+        formatter.should_receive(:success).once.with('Successfully verified ')
         runner.run(['a.coffee', 'b.coffee'], [], { :noop => true })
       end
     end
@@ -103,8 +107,11 @@ describe Guard::CoffeeScript::Runner do
       context 'without the :noop option' do
         it 'shows the error messages' do
           runner.should_receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
-          ::Guard::CoffeeScript::Formatter.should_receive(:error).once.with("a.coffee: Parse error on line 2: Unexpected 'UNARY'")
-          Guard::Notifier.should_receive(:notify).with("a.coffee: Parse error on line 2: Unexpected 'UNARY'", :title => 'CoffeeScript results', :image => :failed, :priority => 2)
+          formatter.should_receive(:error).once.with("a.coffee: Parse error on line 2: Unexpected 'UNARY'")
+          formatter.should_receive(:notify).with("a.coffee: Parse error on line 2: Unexpected 'UNARY'",
+                                                 :title => 'CoffeeScript results',
+                                                 :image => :failed,
+                                                 :priority => 2)
           runner.run(['a.coffee'], [watcher], { :output => 'javascripts' })
         end
       end
@@ -112,8 +119,11 @@ describe Guard::CoffeeScript::Runner do
       context 'with the :noop option' do
         it 'shows the error messages' do
           runner.should_receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
-          ::Guard::CoffeeScript::Formatter.should_receive(:error).once.with("a.coffee: Parse error on line 2: Unexpected 'UNARY'")
-          Guard::Notifier.should_receive(:notify).with("a.coffee: Parse error on line 2: Unexpected 'UNARY'", :title => 'CoffeeScript results', :image => :failed, :priority => 2)
+          formatter.should_receive(:error).once.with("a.coffee: Parse error on line 2: Unexpected 'UNARY'")
+          formatter.should_receive(:notify).with("a.coffee: Parse error on line 2: Unexpected 'UNARY'",
+                                                 :title => 'CoffeeScript results',
+                                                 :image => :failed,
+                                                 :priority => 2)
           runner.run(['a.coffee'], [watcher], { :output => 'javascripts', :noop => true })
         end
       end
@@ -122,32 +132,32 @@ describe Guard::CoffeeScript::Runner do
     context 'without compilation errors' do
       context 'without the :noop option' do
         it 'shows a success messages' do
-          runner.should_receive(:compile).with('a.coffee', { :output => 'javascripts' }).and_return ["OK", true]
-          runner.should_receive(:notify_start).with(['a.coffee'], { :output => 'javascripts' })
-          ::Guard::CoffeeScript::Formatter.should_receive(:success).once.with('Successfully generated javascripts/a.js')
-          Guard::Notifier.should_receive(:notify).with('Successfully generated javascripts/a.js', :title => 'CoffeeScript results')
+          formatter.should_receive(:success).once.with('Successfully generated javascripts/a.js')
+          formatter.should_receive(:notify).with('Successfully generated javascripts/a.js',
+                                                 :title => 'CoffeeScript results')
           runner.run(['a.coffee'], [watcher], { :output => 'javascripts' })
         end
       end
 
       context 'with the :noop option' do
         it 'shows a success messages' do
-          runner.should_receive(:compile).with('a.coffee', { :output => 'javascripts', :noop => true }).and_return ["OK", true]
-          runner.should_receive(:notify_start).with(['a.coffee'], { :output => 'javascripts', :noop => true })
-          ::Guard::CoffeeScript::Formatter.should_receive(:success).once.with('Successfully verified javascripts/a.js')
-          Guard::Notifier.should_receive(:notify).with('Successfully verified javascripts/a.js', :title => 'CoffeeScript results')
-          runner.run(['a.coffee'], [watcher], { :output => 'javascripts', :noop => true })
+          formatter.should_receive(:success).once.with('Successfully verified javascripts/a.js')
+          formatter.should_receive(:notify).with('Successfully verified javascripts/a.js',
+                                                 :title => 'CoffeeScript results')
+          runner.run(['a.coffee'], [watcher], { :output => 'javascripts',
+                                                :noop => true })
         end
       end
 
       context 'with the :hide_success option set to true' do
         let(:watcher) { Guard::Watcher.new('^app/coffeescripts/(.*)\.coffee') }
 
-        it 'compiles the CoffeeScripts to the output and creates nested directories' do
-          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts/x/y")
-          ::Guard::CoffeeScript::Formatter.should_not_receive(:success).with('Successfully generated javascripts/a.js')
-          Guard::Notifier.should_not_receive(:notify).with('Successfully generated javascripts/a.js', :title => 'CoffeeScript results')
-          runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :hide_success => true })
+        it 'does not show the success message' do
+          formatter.should_not_receive(:success).with('Successfully generated javascripts/a.js')
+          formatter.should_not_receive(:notify).with('Successfully generated javascripts/a.js',
+                                                     :title => 'CoffeeScript results')
+          runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts',
+                                                                      :hide_success => true })
         end
       end
     end

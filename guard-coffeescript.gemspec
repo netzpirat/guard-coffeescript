@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'guard/coffeescript/version'
+require 'guard/coffeescript'
 
 Gem::Specification.new do |s|
   s.name        = 'guard-coffeescript'
-  s.version     = Guard::CoffeeScriptVersion::VERSION
+  s.version     = Guard::CoffeeScript::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Michael Kessler']
   s.email       = ['michi@netzpiraten.ch']
@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler',     '~> 1.0'
   s.add_development_dependency 'guard-rspec', '~> 0.4'
   s.add_development_dependency 'rspec',       '~> 2.6'
+  s.add_development_dependency 'yard',        '~> 0.7.2'
+  s.add_development_dependency 'kramdown',    '~> 0.13.3'
 
   s.files        = Dir.glob('{lib}/**/*') + %w[LICENSE README.md]
   s.require_path = 'lib'

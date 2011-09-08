@@ -2,15 +2,25 @@ require 'spec_helper'
 
 describe Guard::CoffeeScript do
 
+  let(:guard) { Guard::CoffeeScript.new }
+
+  let(:runner) { Guard::CoffeeScript::Runner }
+  let(:inspector) { Guard::CoffeeScript::Inspector }
+
   before do
-    Guard::CoffeeScript::Inspector.stub(:clean)
-    Guard::CoffeeScript::Runner.stub(:run)
+    inspector.stub(:clean)
+    runner.stub(:run)
+    guard.stub(:notify)
+  end
+
+  describe 'VERSION' do
+    it 'defines the version' do
+      Guard::CoffeeScript::VERSION.should match /\d+.\d+.\d+/
+    end
   end
 
   describe '#initialize' do
     context 'when no options are provided' do
-      let(:guard) { Guard::CoffeeScript.new }
-
       it 'sets a default :wrap option' do
         guard.options[:bare].should be_false
       end
@@ -29,7 +39,10 @@ describe Guard::CoffeeScript do
     end
 
     context 'with other options than the default ones' do
-      let(:guard) { Guard::CoffeeScript.new(nil, { :output => 'output_folder', :bare => true, :shallow => true, :hide_success => true, :noop => true }) }
+      let(:guard) { Guard::CoffeeScript.new(nil, { :output       => 'output_folder',
+                                                   :bare         => true, :shallow => true,
+                                                   :hide_success => true,
+                                                   :noop         => true }) }
 
       it 'sets the provided :bare option' do
         guard.options[:bare].should be_true
@@ -66,7 +79,8 @@ describe Guard::CoffeeScript do
       end
 
       context 'with an output option' do
-        let(:guard) { Guard::CoffeeScript.new(nil, { :input => 'app/coffeescripts', :output => 'public/javascripts' }) }
+        let(:guard) { Guard::CoffeeScript.new(nil, { :input  => 'app/coffeescripts',
+                                                     :output => 'public/javascripts' }) }
 
         it 'keeps the output directory' do
           guard.options[:output].should eql 'public/javascripts'
@@ -89,29 +103,23 @@ describe Guard::CoffeeScript do
   end
 
   describe '.run_on_change' do
-    let(:guard) { Guard::CoffeeScript.new }
-
-    before do
-      guard.stub(:notify)
-    end
-
     it 'passes the paths to the Inspector for cleanup' do
-      Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'])
+      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'])
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
 
     it 'starts the Runner with the cleaned files' do
-      Guard::CoffeeScript::Inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
-      Guard::CoffeeScript::Runner.should_receive(:run).with(['a.coffee'], [], {
-          :bare => false,
-          :shallow => false,
+      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
+      runner.should_receive(:run).with(['a.coffee'], [], {
+          :bare         => false,
+          :shallow      => false,
           :hide_success => false,
-          :noop => false}).and_return [['a.js'], true]
+          :noop         => false }).and_return [['a.js'], true]
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
 
     it 'notifies the other guards about the changed files' do
-      Guard::CoffeeScript::Runner.should_receive(:run).and_return [['a.js', 'b.js'], true]
+      runner.should_receive(:run).and_return [['a.js', 'b.js'], true]
       guard.should_receive(:notify).with(['a.js', 'b.js'])
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end

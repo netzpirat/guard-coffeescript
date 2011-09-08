@@ -13,21 +13,15 @@ Please be sure to have [Guard](https://github.com/guard/guard) installed.
 
 Install the gem:
 
-```bash
-$ gem install guard-coffeescript
-```
+    $ gem install guard-coffeescript
 
 Add it to your `Gemfile`, preferably inside the development group:
 
-```ruby
-gem 'guard-coffeescript'
-```
+    gem 'guard-coffeescript'
 
 Add guard definition to your `Guardfile` by running this command:
 
-```bash
-$ guard init coffeescript
-```
+    $ guard init coffeescript
 
 ## JSON
 
@@ -60,42 +54,34 @@ install the [executable](http://www.nodejs.org/#download).
 To use the [V8 JavaScript Engine](http://code.google.com/p/v8/), simple add `therubyracer` to your `Gemfile`.
 The Ruby Racer acts as a bridge between Ruby and the V8 engine, that will be automatically installed by the Ruby Racer.
 
-```ruby
-group :development do
-  gem 'therubyracer'
-end
-```
+    group :development do
+      gem 'therubyracer'
+    end
 
 Another alternative is [Mustang](https://github.com/nu7hatch/mustang), a Ruby proxy library for the awesome Google V8
 JavaScript engine. Just add `mustang` to your `Gemfile`:
 
-```ruby
-group :development do
-  gem 'mustang'
-end
-```
+    group :development do
+      gem 'mustang'
+    end
 
 ### Mozilla SpiderMonkey
 
 To use [Mozilla SpiderMonkey](https://developer.mozilla.org/en/SpiderMonkey), simple add `johnson` to your `Gemfile`.
 Johnson embeds the Mozilla SpiderMonkey JavaScript runtime as a C extension.
 
-```ruby
-group :development do
-  gem 'johnson'
-end
-```
+    group :development do
+      gem 'johnson'
+    end
 
 ### Mozilla Rhino
 
 If you're using JRuby, you can embed the [Mozilla Rhino](http://www.mozilla.org/rhino/) runtime by adding `therubyrhino`
 to your `Gemfile`:
 
-```ruby
-group :development do
-  gem 'therubyrhino'
-end
-```
+    group :development do
+      gem 'therubyrhino'
+    end
 
 ### Apple JavaScriptCore
 
@@ -121,15 +107,11 @@ Guard::CoffeeScript can be adapted to all kind of projects. Please read the
 
 In a Ruby project you want to configure your input and output directories.
 
-```ruby
-guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
-```
+    guard 'coffeescript', :input => 'coffeescripts', :output => 'javascripts'
 
 If your output directory is the same as the input directory, you can simply skip it:
 
-```ruby
-guard 'coffeescript', :input => 'javascripts'
-```
+    guard 'coffeescript', :input => 'javascripts'
 
 ### Rails app with the asset pipeline
 
@@ -140,50 +122,42 @@ However, if you would still like to have feedback on the validation of your Coff
 (preferably with a Growl notification) directly after you save a change, then you can still
 use this Guard and simply skip generation of the output file:
 
-```ruby
-guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true
-```
+    guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true
 
 This give you a faster compilation feedback compared to making a subsequent request to your Rails application. If you
 just want to be notified when an error occurs you can hide the success compilation message:
 
-```ruby
-guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true, :hide_success => true
-```
+    guard 'coffeescript', :input => 'app/assets/javascripts', :noop => true, :hide_success => true
 
 ### Rails app without the asset pipeline
 
 Without the asset pipeline you just define an input and output directory like within a normal Ruby project:
 
-```ruby
-guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts'
-```
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts'
 
 ## Options
 
 There following options can be passed to Guard::CoffeeScript:
 
-```ruby
-:input => 'coffeescripts'           # Relative path to the input directory.
-                                    # A suffix `/(.+\.coffee)` will be added to this option.
-                                    # default: nil
+    :input => 'coffeescripts'           # Relative path to the input directory.
+                                        # A suffix `/(.+\.coffee)` will be added to this option.
+                                        # default: nil
 
-:output => 'javascripts'            # Relative path to the output directory.
-                                    # default: the path given with the :input option
+    :output => 'javascripts'            # Relative path to the output directory.
+                                        # default: the path given with the :input option
 
-:noop => true                       # No operation: do not write an output file.
-                                    # default: false
+    :noop => true                       # No operation: do not write an output file.
+                                        # default: false
 
-:bare => true                       # Compile without the top-level function wrapper.
-                                    # Provide either a boolean value or an Array of filenames.
-                                    # default: false
+    :bare => true                       # Compile without the top-level function wrapper.
+                                        # Provide either a boolean value or an Array of filenames.
+                                        # default: false
 
-:shallow => true                    # Do not create nested output directories.
-                                    # default: false
+    :shallow => true                    # Do not create nested output directories.
+                                        # default: false
 
-:hide_success => true               # Disable successful compilation messages.
-                                    # default: false
-```
+    :hide_success => true               # Disable successful compilation messages.
+                                        # default: false
 
 ### Output short notation
 
@@ -191,25 +165,19 @@ In addition to the standard configuration, this Guard has a short notation for c
 and output directory. This notation creates a watcher from the `:input` parameter that matches all CoffeeScript files
 under the given directory and you don't have to specify a watch regular expression.
 
-```ruby
-guard 'coffeescript', :input => 'javascripts'
-```
+    guard 'coffeescript', :input => 'javascripts'
 
 ### Selective bare option
 
 The `:bare` option can take a boolean value that indicates if all scripts should be compiled without the top-level
 function wrapper.
 
-```ruby
-:bare => true
-```
+    :bare => true
 
 But you can also pass an Array of filenames that should be compiled without the top-level function wrapper. The path of
 the file to compile is ignored, so the list of filenames should not contain any path information:
 
-```ruby
-:bare => %w{ a.coffee b.coffee }
-```
+    :bare => %w{ a.coffee b.coffee }
 
 In the above example, all `a.coffee` and `b.coffee` files will be compiled with option `:bare => true` and all other
 files with option `:bare => false`.
@@ -221,27 +189,19 @@ the match of the watch regular expression:
 
 A file
 
-```bash
-/app/coffeescripts/ui/buttons/toggle_button.coffee
-```
+    /app/coffeescripts/ui/buttons/toggle_button.coffee
 
 that has been detected by the watch
 
-```ruby
-watch(%r{^app/coffeescripts/(.+\.coffee)$})
-```
+    watch(%r{^app/coffeescripts/(.+\.coffee)$})
 
 with an output directory of
 
-```ruby
-:output => 'public/javascripts/compiled'
-```
+    :output => 'public/javascripts/compiled'
 
 will be compiled to
 
-```bash
-public/javascripts/compiled/ui/buttons/toggle_button.js
-```
+    public/javascripts/compiled/ui/buttons/toggle_button.js
 
 Note the parenthesis around the `.+\.coffee`. This enables Guard::CoffeeScript to place the full path that was matched
 inside the parenthesis into the proper output directory.
@@ -253,42 +213,40 @@ compiled directly to the output directory.
 
 The Guard short notation
 
-```ruby
-guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
-```
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled'
 
 will be internally converted into the standard notation by adding `/(.+\.coffee)` to the `input` option string and
 create a Watcher that is equivalent to:
 
-```ruby
-guard 'coffeescript', :output => 'public/javascripts/compiled' do
-  watch(%r{^app/coffeescripts/(.+\.coffee)$})
-end
-```
+    guard 'coffeescript', :output => 'public/javascripts/compiled' do
+      watch(%r{^app/coffeescripts/(.+\.coffee)$})
+    end
 
 To add a second source directory that will be compiled to the same output directory, just add another watcher:
 
-```ruby
-guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled' do
-  watch(%r{lib/coffeescripts/(.+\.coffee)})
-end
-```
+    guard 'coffeescript', :input => 'app/coffeescripts', :output => 'public/javascripts/compiled' do
+      watch(%r{lib/coffeescripts/(.+\.coffee)})
+    end
 
 which is equivalent to:
 
-```ruby
-guard 'coffeescript', :output => 'public/javascripts/compiled' do
-  watch(%r{app/coffeescripts/(.+\.coffee)})
-  watch(%r{lib/coffeescripts/(.+\.coffee)})
-end
-```
+    guard 'coffeescript', :output => 'public/javascripts/compiled' do
+      watch(%r{app/coffeescripts/(.+\.coffee)})
+      watch(%r{lib/coffeescripts/(.+\.coffee)})
+    end
 
 ## Development
 
-- Source hosted at [GitHub](https://github.com/netzpirat/guard-coffeescript)
-- Report issues and feature requests to [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues)
+- Documentation hosted at [RubyDoc](http://rubydoc.info/gems/guard-coffeescript/file/README.md).
+- Source hosted at [GitHub](https://github.com/netzpirat/guard-coffeescript).
+- Report issues and feature requests to [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues).
 
-Pull requests are very welcome! Make sure your patches are well tested.
+Pull requests are very welcome! Please try to follow these simple "rules", though:
+
+- Please create a topic branch for every separate change you make.
+- Make sure your patches are well tested.
+- Update the README (if applicable).
+- Please **do not change** the version number.
 
 For questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard`
 (irc.freenode.net).
@@ -302,7 +260,10 @@ For questions please join us on our [Google group](http://groups.google.com/grou
 
 ## Acknowledgment
 
-The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice pice of software
+[Jeremy Ashkenas][] for [CoffeeScript][], that little language that compiles into JavaScript and makes me enjoy the
+frontend.
+
+The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice piece of software
 that is so easy to extend, one *has* to make a plugin for it!
 
 All the authors of the numerous [Guards](https://github.com/guard) available for making the Guard ecosystem

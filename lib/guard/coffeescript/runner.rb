@@ -5,9 +5,24 @@ module Guard
     module Runner
       class << self
 
-        def run(files, watchers, options = {})
+        # The CoffeeScript runner handles the CoffeeScript compilation,
+        # creates nested directories and the output file, writes the result
+        # to the console and triggers optional system notifications.
+        #
+        # @param [Array<String>] paths the spec files or directories
+        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Hash] options the options for the execution
+        # @option options [String] :input the input directory
+        # @option options [String] :output the output directory
+        # @option options [Boolean] :bare do not wrap the output in a top level function
+        # @option options [Boolean] :shallow do not create nested directories
+        # @option options [Boolean] :hide_success hide success message notification
+        # @option options [Boolean] :noop do not generate an output file
+        # @return [Array<Array<String>, Boolean>] the result for the compilation run
+        #
+        def run(files, watchers, options = { })
           notify_start(files, options)
-          changed_files, errors = compile_files(files, options, watchers)
+          changed_files, errors = compile_files(files, watchers, options)
           notify_result(changed_files, errors, options)
 
           [changed_files, errors.empty?]
@@ -16,14 +31,27 @@ module Guard
           Formatter.error("ExecJS engine error: " + e.message)
         end
 
-      private
+        private
 
+        # Generates a start compilation notification.
+        #
+        # @param [Array<String>] files the generated files
+        # @param [Hash] options the options for the execution
+        # @option options [Boolean] :noop do not generate an output file
+        #
         def notify_start(files, options)
           message = options[:message] || (options[:noop] ? 'Verify ' : 'Compile ') + files.join(', ')
           Formatter.info(message, :reset => true)
         end
 
-        def compile_files(files, options, watchers)
+        # Compiles all CoffeeScript files and writes the JavaScript files.
+        #
+        # @param [Array<String>] files the files to compile
+        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Hash] options the options for the execution
+        # @return [Array<Array<String>, Array<String>] the result for the compilation run
+        #
+        def compile_files(files, watchers, options)
           errors        = []
           changed_files = []
           directories   = detect_nested_directories(watchers, files, options)
@@ -32,7 +60,7 @@ module Guard
             scripts.each do |file|
               begin
                 content = compile(file, options)
-                changed_files << process_compile_result(content, file, directory, options)
+                changed_files << write_javascript_file(content, file, directory, options)
               rescue ExecJS::ProgramError => e
                 error_message = file + ': ' + e.message.to_s
                 errors << error_message
@@ -44,21 +72,42 @@ module Guard
           [changed_files.compact, errors]
         end
 
+        # Compile the CoffeeScripts
+        #
+        # @param [String] file the CoffeeScript file
+        # @param [Hash] options the options for the execution
+        #
         def compile(file, options)
           file_options = options_for_file(file, options)
           ::CoffeeScript.compile(File.read(file), file_options)
         end
 
+        # Gets the CoffeeScript compilation options.
+        #
+        # @param [String] file the CoffeeScript file
+        # @param [Hash] options the options for the execution
+        # @option options [Boolean] :bare do not wrap the output in a top level function
+        #
         def options_for_file(file, options)
           return options unless options[:bare].respond_to? :include?
-          file_options = options.clone
-          filename = file[/([^\/]*)\.coffee/]
+
+          file_options        = options.clone
+          filename            = file[/([^\/]*)\.coffee/]
           file_options[:bare] = file_options[:bare].include?(filename)
 
           file_options
         end
 
-        def process_compile_result(content, file, directory, options)
+        # Analyzes the CoffeeScript compilation output and creates the
+        # nested directories and writes the output file.
+        #
+        # @param [String] content the JavaScript content
+        # @param [String] file the CoffeeScript file name
+        # @param [String] directory the output directory
+        # @param [Hash] options the options for the execution
+        # @option options [Boolean] :noop do not generate an output file
+        #
+        def write_javascript_file(content, file, directory, options)
           FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory) && !options[:noop]
           filename = File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
           File.open(File.expand_path(filename), 'w') { |f| f.write(content) } if !options[:noop]
@@ -66,10 +115,20 @@ module Guard
           filename
         end
 
+        # Detects the output directory for each CoffeeScript file. Builds
+        # the product of all watchers and assigns to each directory
+        # the files to which it belongs to.
+        #
+        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Array<String>] files the CoffeeScript files
+        # @param [Hash] options the options for the execution
+        # @option options [String] :output the output directory
+        # @option options [Boolean] :shallow do not create nested directories
+        #
         def detect_nested_directories(watchers, files, options)
           return { options[:output] => files } if options[:shallow]
 
-          directories = {}
+          directories = { }
 
           watchers.product(files).each do |watcher, file|
             if matches = file.match(watcher.pattern)
@@ -85,7 +144,15 @@ module Guard
           directories
         end
 
-        def notify_result(changed_files, errors, options = {})
+        # Writes console and system notifications about the result of the compilation.
+        #
+        # @param [Array<String>] changed_files the changed JavaScript files
+        # @param [Array<String>] errors the error messages
+        # @param [Hash] options the options for the execution
+        # @option options [Boolean] :hide_success hide success message notification
+        # @option options [Boolean] :noop do not generate an output file
+        #
+        def notify_result(changed_files, errors, options = { })
           if !errors.empty?
             Formatter.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed, :priority => 2)
           elsif !options[:hide_success]
