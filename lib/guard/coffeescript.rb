@@ -13,6 +13,14 @@ module Guard
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
 
+    DEFAULT_OPTIONS = {
+        :bare         => false,
+        :shallow      => false,
+        :hide_success => false,
+        :noop         => false,
+        :all_on_start => false
+    }
+
     # Initialize Guard::CoffeeScript.
     #
     # @param [Array<Guard::Watcher>] watchers the watchers in the Guard block
@@ -22,16 +30,12 @@ module Guard
     # @option options [Boolean] :bare do not wrap the output in a top level function
     # @option options [Boolean] :shallow do not create nested directories
     # @option options [Boolean] :hide_success hide success message notification
+    # @option options [Boolean] :all_on_start generate all JavaScripts files on start
     # @option options [Boolean] :noop do not generate an output file
     #
-    def initialize(watchers = [], options = { })
+    def initialize(watchers = [], options = {})
       watchers = [] if !watchers
-      defaults = {
-          :bare         => false,
-          :shallow      => false,
-          :hide_success => false,
-          :noop         => false
-      }
+      defaults = DEFAULT_OPTIONS.clone
 
       if options[:input]
         defaults.merge!({ :output => options[:input] })
@@ -41,10 +45,12 @@ module Guard
       super(watchers, defaults.merge(options))
     end
 
-    # Gets called once when guard starts.
-
+    # Gets called once when Guard starts.
+    #
+    # @raise [:task_has_failed] when stop has failed
+    #
     def start
-      run_all if @options[:all_on_start]
+      run_all if options[:all_on_start]
     end
 
     # Gets called when all files should be regenerated.
@@ -52,7 +58,6 @@ module Guard
     # @return [Boolean] when running all specs was successful
     #
     def run_all
-      UI.info "Running everything!!"
       run_on_change(Watcher.match_files(self, Dir.glob(File.join('**', '*.coffee'))))
     end
 

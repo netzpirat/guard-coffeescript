@@ -7,6 +7,8 @@ describe Guard::CoffeeScript do
   let(:runner) { Guard::CoffeeScript::Runner }
   let(:inspector) { Guard::CoffeeScript::Inspector }
 
+  let(:defaults) { Guard::CoffeeScript::DEFAULT_OPTIONS }
+
   before do
     inspector.stub(:clean)
     runner.stub(:run)
@@ -30,12 +32,18 @@ describe Guard::CoffeeScript do
       it 'sets a default :noop option' do
         guard.options[:noop].should be_false
       end
+
+      it 'sets a default :all_on_start option' do
+        guard.options[:all_on_start].should be_false
+      end
     end
 
     context 'with other options than the default ones' do
       let(:guard) { Guard::CoffeeScript.new(nil, { :output       => 'output_folder',
-                                                   :bare         => true, :shallow => true,
+                                                   :bare         => true,
+                                                   :shallow      => true,
                                                    :hide_success => true,
+                                                   :all_on_start => true,
                                                    :noop         => true }) }
 
       it 'sets the provided :bare option' do
@@ -50,8 +58,12 @@ describe Guard::CoffeeScript do
         guard.options[:hide_success].should be_true
       end
 
-      it 'sets a provided :noop option' do
+      it 'sets the provided :noop option' do
         guard.options[:noop].should be_true
+      end
+
+      it 'sets the provided :all_on_start option' do
+        guard.options[:all_on_start].should be_true
       end
     end
 
@@ -83,7 +95,23 @@ describe Guard::CoffeeScript do
     end
   end
 
-  describe '.run_all' do
+  describe '#start' do
+    it 'calls #run_all' do
+      guard.should_not_receive(:run_all)
+      guard.start
+    end
+
+    context 'with the :all_on_start option' do
+      let(:guard) { Guard::CoffeeScript.new(nil, :all_on_start => true) }
+
+      it 'calls #run_all' do
+        guard.should_receive(:run_all)
+        guard.start
+      end
+    end
+  end
+
+  describe '#run_all' do
     let(:guard) { Guard::CoffeeScript.new([Guard::Watcher.new('^x/(.*)\.coffee')]) }
 
     before do
@@ -96,7 +124,7 @@ describe Guard::CoffeeScript do
     end
   end
 
-  describe '.run_on_change' do
+  describe '#run_on_change' do
     it 'passes the paths to the Inspector for cleanup' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'])
       guard.run_on_change(['a.coffee', 'b.coffee'])
@@ -104,11 +132,7 @@ describe Guard::CoffeeScript do
 
     it 'starts the Runner with the cleaned files' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
-      runner.should_receive(:run).with(['a.coffee'], [], {
-          :bare         => false,
-          :shallow      => false,
-          :hide_success => false,
-          :noop         => false }).and_return [['a.js'], true]
+      runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [['a.js'], true]
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
 
