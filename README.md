@@ -258,6 +258,7 @@ For questions please join us on our [Google group](http://groups.google.com/grou
 
 * [Aaron Jensen](https://github.com/aaronjensen)
 * [Andrew Assarattanakul](https://github.com/vizjerai)
+* [Elijah Miller](https://github.com/jqr)
 * [Jeremy Raines](https://github.com/jraines)
 * [Patrick Ewing](https://github.com/hoverbird)
 
