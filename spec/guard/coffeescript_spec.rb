@@ -143,4 +143,14 @@ describe Guard::CoffeeScript do
       guard.run_on_change(['a.coffee', 'b.coffee'])
     end
   end
+
+  describe '#run_on_deletion' do
+    it 'removes generated the generated javascript' do
+      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee', 'c.coffee']).and_return ['a.coffee', 'b.coffee']
+      File.should_receive(:exists?).with('a.js').and_return true
+      File.should_receive(:exists?).with('b.js').and_return false
+      File.should_receive(:remove).with('a.js')
+      guard.run_on_deletion(['a.coffee', 'b.coffee', 'c.coffee'])
+    end
+  end
 end
