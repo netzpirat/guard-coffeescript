@@ -55,7 +55,7 @@ module Guard
 
     # Gets called when all files should be regenerated.
     #
-    # @return [Boolean] when running all specs was successful
+    # @raise [:task_has_failed] when stop has failed
     #
     def run_all
       run_on_change(Watcher.match_files(self, Dir.glob(File.join('**', '*.coffee'))))
@@ -64,13 +64,13 @@ module Guard
     # Gets called when watched paths and files have changes.
     #
     # @param [Array<String>] paths the changed paths and files
-    # @return [Boolean] when running the changed specs was successful
+    # @raise [:task_has_failed] when stop has failed
     #
     def run_on_change(paths)
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
       notify changed_files
 
-      success
+      throw :task_has_failed unless success
     end
 
     private
