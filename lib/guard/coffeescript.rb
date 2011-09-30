@@ -41,11 +41,18 @@ module Guard
       super(watchers, defaults.merge(options))
     end
 
-    # Gets called when all specs should be run.
+    # Gets called once when guard starts.
+
+    def start
+      run_all if @options[:all_on_start]
+    end
+
+    # Gets called when all files should be regenerated.
     #
     # @return [Boolean] when running all specs was successful
     #
     def run_all
+      UI.info "Running everything!!"
       run_on_change(Watcher.match_files(self, Dir.glob(File.join('**', '*.coffee'))))
     end
 
