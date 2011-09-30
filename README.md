@@ -159,6 +159,9 @@ There following options can be passed to Guard::CoffeeScript:
     :hide_success => true               # Disable successful compilation messages.
                                         # default: false
 
+    :all_on_start => true               # Regenerate all files on startup
+                                        # default: false
+
 ### Output short notation
 
 In addition to the standard configuration, this Guard has a short notation for configure projects with a single input
