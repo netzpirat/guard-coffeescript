@@ -145,7 +145,7 @@ describe Guard::CoffeeScript do
   end
 
   describe '#run_on_deletion' do
-    it 'removes generated the generated javascript' do
+    it 'removes the generated javascript' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee', 'c.coffee']).and_return ['a.coffee', 'b.coffee']
       File.should_receive(:exists?).with('a.js').and_return true
       File.should_receive(:exists?).with('b.js').and_return false
