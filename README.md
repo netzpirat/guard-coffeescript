@@ -264,8 +264,8 @@ For questions please join us on our [Google group](http://groups.google.com/grou
 
 ## Acknowledgment
 
-[Jeremy Ashkenas][] for [CoffeeScript][], that little language that compiles into JavaScript and makes me enjoy the
-frontend.
+[Jeremy Ashkenas](http://twitter.com/#!/jashkenas) for [CoffeeScript](http://jashkenas.github.com/coffee-script/),
+that little language that compiles into JavaScript and makes me enjoy the frontend.
 
 The [Guard Team](https://github.com/guard/guard/contributors) for giving us such a nice piece of software
 that is so easy to extend, one *has* to make a plugin for it!
