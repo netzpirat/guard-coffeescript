@@ -125,7 +125,7 @@ describe Guard::CoffeeScript do
   end
 
   describe '#run_on_change' do
-    it 'throws :task_has_failed when an error occured' do
+    it 'throws :task_has_failed when an error occurs' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [[], false]
       expect { guard.run_on_change(['a.coffee', 'b.coffee']) }.to throw_symbol :task_has_failed
