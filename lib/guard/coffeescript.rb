@@ -70,7 +70,7 @@ module Guard
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
       notify changed_files
 
-      throw :task_has_failed unless success
+      #throw :task_has_failed unless success
     end
 
     # Called on file(s) deletions that the Guard watches.
