@@ -5,6 +5,7 @@ pkg/*
 .yardoc
 doc
 Gemfile.lock
+.rbx
 
 ## MAC OS
 .DS_Store
