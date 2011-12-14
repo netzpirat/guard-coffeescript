@@ -320,6 +320,7 @@ For questions please join us in our [Google group](http://groups.google.com/grou
 * [Andrew Assarattanakul](https://github.com/vizjerai)
 * [Elijah Miller](https://github.com/jqr)
 * [Jeremy Raines](https://github.com/jraines)
+* [JT](https://github.com/jtolds)
 * [Patrick Ewing](https://github.com/hoverbird)
 
 ## Acknowledgment
