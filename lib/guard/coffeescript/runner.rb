@@ -108,6 +108,7 @@ module Guard
         # @option options [Boolean] :noop do not generate an output file
         #
         def write_javascript_file(content, file, directory, options)
+          directory = Dir.pwd if !directory || directory.empty?
           FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory) && !options[:noop]
           filename = File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
           File.open(File.expand_path(filename), 'w') { |f| f.write(content) } if !options[:noop]
