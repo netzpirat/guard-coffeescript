@@ -283,6 +283,13 @@ guard 'coffeescript', :output => 'public/javascripts/compiled' do
 end
 ```
 
+## Shameless self promotion
+
+Developed by Michael Kessler, sponsored by [mksoft.ch](https://mksoft.ch).
+
+If you like Guard::CoffeeScript, you can watch the repository at [GitHub](https://github.com/netzpirat/guard-coffeescript) and
+follow [@netzpirat](https://twitter.com/#!/netzpirat) on Twitter for project updates.
+
 ## Issues
 
 You can report issues and feature requests to [GitHub Issues](https://github.com/netzpirat/guard-coffeescript/issues). Try to figure out
