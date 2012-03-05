@@ -61,7 +61,7 @@ module Guard
               begin
                 content = compile(file, options)
                 changed_files << write_javascript_file(content, file, directory, options)
-              rescue Exception => e
+              rescue => e
                 error_message = file + ': ' + e.message.to_s
                 errors << error_message
                 Formatter.error(error_message)
