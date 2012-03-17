@@ -48,6 +48,20 @@ describe Guard::CoffeeScript::Runner do
         end
       end
 
+      context 'without the :output option' do
+        it 'compiles the CoffeeScripts to the same dir like the file and replace .coffee with .js' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/src")
+          File.should_receive(:open).with("#{ @project_path }/src/a.js", 'w')
+          runner.run(['src/a.coffee'], [watcher])
+        end
+
+        it 'compiles the CoffeeScripts to the same dir like the file and replace .js.coffee with .js' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/src")
+          File.should_receive(:open).with("#{ @project_path }/src/a.js", 'w')
+          runner.run(['src/a.js.coffee'], [watcher])
+        end
+      end
+
       context 'with the :noop option' do
         it 'does not write the output file' do
           FileUtils.should_not_receive(:mkdir_p).with("#{ @project_path }/target")
