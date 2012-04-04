@@ -26,9 +26,6 @@ module Guard
           notify_result(changed_files, errors, options)
 
           [changed_files, errors.empty?]
-
-        rescue ExecJS::RuntimeError => e
-          Formatter.error("ExecJS engine error: " + e.message)
         end
 
         private
@@ -61,7 +58,7 @@ module Guard
               begin
                 content = compile(file, options)
                 changed_files << write_javascript_file(content, file, directory, options)
-              rescue ExecJS::ProgramError => e
+              rescue => e
                 error_message = file + ': ' + e.message.to_s
                 errors << error_message
                 Formatter.error(error_message)
