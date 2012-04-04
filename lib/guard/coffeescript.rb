@@ -93,6 +93,8 @@ module Guard
     # @param [Array<String>] changed_files the files that have been changed
     #
     def notify(changed_files)
+      return if !changed_files || changed_files.empty?
+
       ::Guard.guards.each do |guard|
         paths = Watcher.match_files(guard, changed_files)
         guard.run_on_change paths unless paths.empty?
