@@ -18,6 +18,7 @@ module Guard
         :shallow      => false,
         :hide_success => false,
         :noop         => false,
+        :error_to_js  => false,
         :all_on_start => false
     }
 
