@@ -141,6 +141,15 @@ describe Guard::CoffeeScript::Runner do
           runner.run(['a.coffee'], [watcher], { :output => 'javascripts', :noop => true })
         end
       end
+
+      context 'with the :error_to_js option' do
+        it 'write the error message as javascript file' do
+          runner.should_receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
+          runner.should_receive(:write_javascript_file).once.with("throw \"a.coffee: Parse error on line 2: Unexpected 'UNARY'\";", 'a.coffee', 'javascripts', kind_of(Hash))
+          runner.run(['a.coffee'], [watcher], { :output => 'javascripts', :error_to_js => true })
+        end
+
+      end
     end
 
     context 'without compilation errors' do
