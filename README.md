@@ -162,7 +162,7 @@ There following options can be passed to Guard::CoffeeScript:
 
 ```ruby
 :input => 'coffeescripts'           # Relative path to the input directory.
-                                    # A suffix `/(.+\.coffee)` will be added to this option.
+                                    # A suffix /(.+\.coffee) will be added to this option.
                                     # default: nil
 
 :output => 'javascripts'            # Relative path to the output directory.
@@ -182,6 +182,10 @@ There following options can be passed to Guard::CoffeeScript:
                                     # default: false
 
 :all_on_start => true               # Regenerate all files on startup
+                                    # default: false
+
+:error_to_js => true                # Print the Coffeescript error message directly in the
+                                    # JavaScript file
                                     # default: false
 ```
 

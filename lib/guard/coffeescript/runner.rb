@@ -60,6 +60,14 @@ module Guard
                 changed_files << write_javascript_file(content, file, directory, options)
               rescue => e
                 error_message = file + ': ' + e.message.to_s
+
+                if options[:error_to_js]
+                  js_error_message = %q(#{error_message})
+                  js_error_message = "var message = \"#{error_message} \";"
+                  js_error_message += "throw message;"
+                  changed_files << write_javascript_file(js_error_message, file, directory, options)
+                end
+
                 errors << error_message
                 Formatter.error(error_message)
               end
