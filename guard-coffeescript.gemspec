@@ -18,9 +18,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'guard', '>= 0.8.3'
   s.add_dependency 'coffee-script', '>= 2.2.0'
 
-  s.add_development_dependency 'bundler',     '~> 1.1'
-  s.add_development_dependency 'guard-rspec', '~> 0.6'
-  s.add_development_dependency 'rspec',       '~> 2.8'
+  s.add_development_dependency 'bundler'
+  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'rspec'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'redcarpet'
 
