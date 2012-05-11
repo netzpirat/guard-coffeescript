@@ -59,7 +59,7 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_all
-      run_on_change(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.coffee')))
+      run_on_changes(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.coffee')))
     end
 
     # Gets called when watched paths and files have changes.
@@ -67,7 +67,7 @@ module Guard
     # @param [Array<String>] paths the changed paths and files
     # @raise [:task_has_failed] when stop has failed
     #
-    def run_on_change(paths)
+    def run_on_changes(paths)
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
       notify changed_files
 
@@ -79,7 +79,7 @@ module Guard
     # @param [Array<String>] paths the deleted files or paths
     # @raise [:task_has_failed] when run_on_change has failed
     #
-    def run_on_deletion(paths)
+    def run_on_removals(paths)
       Inspector.clean(paths).each do |file|
         javascript = file.gsub(/(js\.coffee|coffee)$/, 'js')
         File.remove(javascript) if File.exists?(javascript)
