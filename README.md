@@ -327,12 +327,7 @@ follow [@netzpirat](https://twitter.com/#!/netzpirat) on Twitter for project upd
 
 ## Contributors
 
-* [Aaron Jensen](https://github.com/aaronjensen)
-* [Andrew Assarattanakul](https://github.com/vizjerai)
-* [Elijah Miller](https://github.com/jqr)
-* [Jeremy Raines](https://github.com/jraines)
-* [JT](https://github.com/jtolds)
-* [Patrick Ewing](https://github.com/hoverbird)
+See the GitHub list of [contributors](https://github.com/netzpirat/guard-coffeescript/contributors).
 
 ## Acknowledgment
 
