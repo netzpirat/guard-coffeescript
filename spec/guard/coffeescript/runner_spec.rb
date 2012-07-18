@@ -1,20 +1,20 @@
 require 'spec_helper'
 
 describe Guard::CoffeeScript::Runner do
+  let(:runner) { Guard::CoffeeScript::Runner }
+  let(:watcher) { Guard::Watcher.new('^(.*)\.coffee') }
+  let(:formatter) { Guard::CoffeeScript::Formatter }
+
+  before do
+    runner.stub(:compile).and_return ''
+    formatter.stub(:notify)
+
+    FileUtils.stub(:mkdir_p)
+    FileUtils.stub(:remove_file)
+    File.stub(:open)
+  end
+
   describe '#run' do
-
-    let(:runner) { Guard::CoffeeScript::Runner }
-    let(:watcher) { Guard::Watcher.new('^(.*)\.coffee') }
-    let(:formatter) { Guard::CoffeeScript::Formatter }
-
-    before do
-      runner.stub(:compile).and_return ''
-      formatter.stub(:notify)
-
-      FileUtils.stub(:mkdir_p)
-      File.stub(:open)
-    end
-
     context 'without the :noop option' do
       it 'shows a start notification' do
         formatter.should_receive(:info).once.with('Compile a.coffee, b.coffee', { :reset => true })
@@ -185,5 +185,28 @@ describe Guard::CoffeeScript::Runner do
       end
     end
 
+  end
+
+  describe '#remove' do
+    let(:watcher) { Guard::Watcher.new(%r{src/.+\.coffee}) }
+
+    before do
+      File.should_receive(:exists?).with('target/a.js').and_return true
+      File.should_receive(:exists?).with('target/b.js').and_return true
+    end
+
+    it 'removes the files' do
+      FileUtils.should_receive(:remove_file).with('target/a.js')
+      FileUtils.should_receive(:remove_file).with('target/b.js')
+      runner.remove(['src/a.coffee', 'src/b.coffee'], [watcher], { :output => 'target' })
+    end
+
+    it 'shows a notification' do
+      formatter.should_receive(:success).once.with('Removed target/a.js, target/b.js')
+      formatter.should_receive(:notify).with('Removed target/a.js, target/b.js',
+                                             :title => 'CoffeeScript results')
+
+      runner.remove(['src/a.coffee', 'src/b.coffee'], [watcher], { :output => 'target' })
+    end
   end
 end

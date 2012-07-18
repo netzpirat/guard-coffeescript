@@ -12,6 +12,7 @@ describe Guard::CoffeeScript do
   before do
     inspector.stub(:clean)
     runner.stub(:run)
+    runner.stub(:remove)
     guard.stub(:notify)
   end
 
@@ -145,12 +146,15 @@ describe Guard::CoffeeScript do
   end
 
   describe '#run_on_removals' do
-    it 'removes the generated javascript' do
-      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee', 'c.coffee']).and_return ['a.coffee', 'b.coffee']
-      File.should_receive(:exists?).with('a.js').and_return true
-      File.should_receive(:exists?).with('b.js').and_return false
-      File.should_receive(:remove).with('a.js')
-      guard.run_on_removals(['a.coffee', 'b.coffee', 'c.coffee'])
+    it 'cleans the paths accepting missing files' do
+      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'], { :missing_ok => true })
+      guard.run_on_removals(['a.coffee', 'b.coffee'])
+    end
+
+    it 'removes the files' do
+      inspector.should_receive(:clean).and_return ['a.coffee', 'b.coffee']
+      runner.should_receive(:remove).with(['a.coffee', 'b.coffee'], guard.watchers, guard.options)
+      guard.run_on_removals(['a.coffee', 'b.coffee'])
     end
   end
 end

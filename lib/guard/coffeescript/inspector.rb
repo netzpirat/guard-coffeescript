@@ -11,7 +11,7 @@ module Guard
         # CoffeeScript files.
         #
         # @param [Array<String>] paths the changed paths
-        # @param [Hash] options
+        # @param [Hash] options the clean options
         # @option options [String] :missing_ok don't remove missing files from list
         # @return [Array<String>] the valid spec files
         #
@@ -26,6 +26,8 @@ module Guard
         # Tests if the file is valid.
         #
         # @param [String] file the file
+        # @param [Hash] options the clean options
+        # @option options [String] :missing_ok don't remove missing files from list
         # @return [Boolean] when the file valid
         #
         def coffee_file?(path, options)

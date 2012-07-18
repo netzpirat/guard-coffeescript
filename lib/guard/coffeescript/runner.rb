@@ -51,9 +51,11 @@ module Guard
             end
           end
 
-          message = "Removed #{ removed_files.join(', ') }"
-          Formatter.success(message)
-          Formatter.notify(message, :title => 'CoffeeScript results')
+          if removed_files.length > 0
+            message = "Removed #{ removed_files.join(', ') }"
+            Formatter.success(message)
+            Formatter.notify(message, :title => 'CoffeeScript results')
+          end
         end
 
         private
