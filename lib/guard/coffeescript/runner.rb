@@ -200,7 +200,7 @@ module Guard
           if !errors.empty?
             Formatter.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed, :priority => 2)
           elsif !options[:hide_success]
-            message = "#{Time.now.strftime('%H:%M:%S %p')} Successfully #{ options[:noop] ? 'verified' : 'generated' } #{ changed_files.join(', ') }"
+            message = "#{Time.now.strftime('%r')} Successfully #{ options[:noop] ? 'verified' : 'generated' } #{ changed_files.join(', ') }"
             Formatter.success(message)
             Formatter.notify(message, :title => 'CoffeeScript results')
           end
