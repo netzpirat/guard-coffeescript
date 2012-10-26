@@ -69,7 +69,6 @@ module Guard
     #
     def run_on_changes(paths)
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
-      notify changed_files
 
       throw :task_has_failed unless success
     end
@@ -81,20 +80,6 @@ module Guard
     #
     def run_on_removals(paths)
       Runner.remove(Inspector.clean(paths, :missing_ok => true), watchers, options)
-    end
-
-    private
-
-    # Notify changed files back to Guard, so that other Guards can continue
-    # to work with the generated files.
-    #
-    # @param [Array<String>] changed_files the files that have been changed
-    #
-    def notify(changed_files)
-      ::Guard.guards.each do |guard|
-        paths = Watcher.match_files(guard, changed_files)
-        guard.run_on_change paths unless paths.empty?
-      end
     end
 
   end

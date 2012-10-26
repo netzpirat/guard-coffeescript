@@ -13,7 +13,6 @@ describe Guard::CoffeeScript do
     inspector.stub(:clean)
     runner.stub(:run)
     runner.stub(:remove)
-    guard.stub(:notify)
   end
 
   describe '#initialize' do
@@ -135,12 +134,6 @@ describe Guard::CoffeeScript do
     it 'starts the Runner with the cleaned files' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [['a.js'], true]
-      guard.run_on_changes(['a.coffee', 'b.coffee'])
-    end
-
-    it 'notifies the other guards about the changed files' do
-      runner.should_receive(:run).and_return [['a.js', 'b.js'], true]
-      guard.should_receive(:notify).with(['a.js', 'b.js'])
       guard.run_on_changes(['a.coffee', 'b.coffee'])
     end
   end
