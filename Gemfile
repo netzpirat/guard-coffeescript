@@ -4,10 +4,6 @@ gemspec
 
 gem 'rake'
 
-platform :ruby do
-  gem 'rb-readline'
-end
-
 platform :ruby_18 do
   gem 'json'
 end
