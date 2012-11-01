@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.2.1 - November 1, 2012
 
 - Remove file creation notification.
 
