@@ -20,7 +20,6 @@ if RbConfig::CONFIG['target_os'] =~ /darwin/i
   gem 'rb-fsevent', :require => false
   gem 'ruby_gntp', :require => false
 elsif RbConfig::CONFIG['target_os'] =~ /linux/i
-  gem 'libnotify',  '~> 0.8.0', :require => false
   gem 'libnotify', :require => false
 elsif RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
   gem 'win32console', :require => false
