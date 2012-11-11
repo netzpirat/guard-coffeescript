@@ -69,6 +69,21 @@ describe Guard::CoffeeScript::Runner do
           runner.run(['src/a.coffee'], [watcher], { :output => 'target', :noop => true })
         end
       end
+
+      context 'with the :source_map option' do
+        it 'compiles the source map to the same dir like the file and replace .coffee with .js.map' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/src")
+          File.should_receive(:open).with("#{ @project_path }/src/a.js.map", 'w')
+          runner.run(['src/a.coffee'], [watcher], :source_map => true)
+        end
+
+        it 'compiles the source map to the same dir like the file and replace .js.coffee with .js.map' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/src")
+          File.should_receive(:open).with("#{ @project_path }/src/a.js.map", 'w')
+          runner.run(['src/a.js.coffee'], [watcher], :source_map => true)
+        end
+
+      end
     end
 
     context 'with the :bare option set to an array of filenames' do
@@ -94,7 +109,6 @@ describe Guard::CoffeeScript::Runner do
         ::CoffeeScript.should_receive(:compile).with 'src/b.coffee', hash_including(:bare => false)
         runner.run(['src/a.coffee', 'src/b.coffee'], [watcher], { :output => 'target', :bare => ['a.coffee'] })
       end
-
     end
 
     context 'with the :shallow option set to false' do
@@ -105,6 +119,14 @@ describe Guard::CoffeeScript::Runner do
         File.should_receive(:open).with("#{ @project_path }/javascripts/x/y/a.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => false })
       end
+
+      context 'with the :source_map option' do
+        it 'generates the source map to the output and creates nested directories' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts/x/y")
+          File.should_receive(:open).with("#{ @project_path }/javascripts/x/y/a.js.map", 'w')
+          runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => false, :source_map => true })
+        end
+      end
     end
 
     context 'with the :shallow option set to true' do
@@ -114,6 +136,14 @@ describe Guard::CoffeeScript::Runner do
         FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts")
         File.should_receive(:open).with("#{ @project_path }/javascripts/a.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => true })
+      end
+
+      context 'with the :source_map option' do
+        it 'generates the source map to the output without creating nested directories' do
+          FileUtils.should_receive(:mkdir_p).with("#{ @project_path }/javascripts")
+          File.should_receive(:open).with("#{ @project_path }/javascripts/a.js.map", 'w')
+          runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher], { :output => 'javascripts', :shallow => true, :source_map => true })
+        end
       end
     end
 

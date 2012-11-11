@@ -36,6 +36,11 @@ describe Guard::CoffeeScript do
       it 'sets a default :all_on_start option' do
         guard.options[:all_on_start].should be_false
       end
+
+      it 'sets the provided :source_maps option' do
+        guard.options[:source_map].should be_false
+      end
+
     end
 
     context 'with other options than the default ones' do
@@ -44,7 +49,9 @@ describe Guard::CoffeeScript do
                                                    :shallow      => true,
                                                    :hide_success => true,
                                                    :all_on_start => true,
-                                                   :noop         => true }) }
+                                                   :noop         => true,
+                                                   :source_map  => true
+      }) }
 
       it 'sets the provided :bare option' do
         guard.options[:bare].should be_true
@@ -64,6 +71,10 @@ describe Guard::CoffeeScript do
 
       it 'sets the provided :all_on_start option' do
         guard.options[:all_on_start].should be_true
+      end
+
+      it 'sets the provided :source_maps option' do
+        guard.options[:source_map].should be_true
       end
     end
 

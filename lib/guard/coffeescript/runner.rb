@@ -18,6 +18,7 @@ module Guard
         # @option options [Boolean] :shallow do not create nested directories
         # @option options [Boolean] :hide_success hide success message notification
         # @option options [Boolean] :noop do not generate an output file
+        # @option options [Boolean] :source_map generate the source map files
         # @return [Array<Array<String>, Boolean>] the result for the compilation run
         #
         def run(files, watchers, options = { })
@@ -86,8 +87,9 @@ module Guard
           directories.each do |directory, scripts|
             scripts.each do |file|
               begin
-                content = compile(file, options)
-                changed_files << write_javascript_file(content, file, directory, options)
+                js, map = compile(file, options)
+                changed_files << write_javascript_file(js, map, file, directory, options)
+
               rescue => e
                 error_message = file + ': ' + e.message.to_s
 
@@ -102,17 +104,23 @@ module Guard
             end
           end
 
-          [changed_files.compact, errors]
+          [changed_files.flatten.compact, errors]
         end
 
-        # Compile the CoffeeScripts
+        # Compile the CoffeeScript and generate the source map.
         #
-        # @param [String] file the CoffeeScript file
+        # @param [String] filename the CoffeeScript file n
         # @param [Hash] options the options for the execution
+        # @option options [Boolean] :source_map generate the source map files
+        # @return [Array<String, String>] the JavaScript source and the source map
         #
-        def compile(file, options)
+        def compile(filename, options)
+          file = File.read(filename)
           file_options = options_for_file(file, options)
-          ::CoffeeScript.compile(File.read(file), file_options)
+          js  = ::CoffeeScript.compile(file, file_options)
+          map = options[:source_map] ? ::CoffeeScript.compile(file, file_options.merge(:format => :map)) : nil
+
+          [js, map]
         end
 
         # Gets the CoffeeScript compilation options.
@@ -134,19 +142,30 @@ module Guard
         # Analyzes the CoffeeScript compilation output and creates the
         # nested directories and writes the output file.
         #
-        # @param [String] content the JavaScript content
+        # @param [String] js the JavaScript content
+        # @param [String] map the source map content
         # @param [String] file the CoffeeScript file name
         # @param [String] directory the output directory
         # @param [Hash] options the options for the execution
         # @option options [Boolean] :noop do not generate an output file
+        # @return [String] the JavaScript file name
         #
-        def write_javascript_file(content, file, directory, options)
+        def write_javascript_file(js, map, file, directory, options)
           directory = Dir.pwd if !directory || directory.empty?
-          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory) && !options[:noop]
           filename = javascript_file_name(file, directory)
-          File.open(File.expand_path(filename), 'w') { |f| f.write(content) } if !options[:noop]
 
-          filename
+          return filename if options[:noop]
+
+          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
+          File.open(File.expand_path(filename), 'w') { |f| f.write(js) }
+
+          if options[:source_map]
+            map_name = filename + '.map'
+            File.open(File.expand_path(map_name), 'w') { |f| f.write(map) }
+            [filename, map_name]
+          else
+            filename
+          end
         end
 
         # Calculates the output filename from the coffescript filename and
