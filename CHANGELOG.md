@@ -1,5 +1,10 @@
 # Changelog
 
+## Master
+
+- Add information about using CoffeeScript Redux.
+- Add `:source_map` option for CoffeeScript Redux.
+
 ## 1.2.1 - November 1, 2012
 
 - Remove file creation notification.
