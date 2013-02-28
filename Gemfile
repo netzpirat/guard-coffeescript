@@ -25,3 +25,8 @@ elsif RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
   gem 'win32console', :require => false
   gem 'rb-notifu', :require => false
 end
+
+unless ENV['TRAVIS']
+  gem 'redcarpet'
+  gem 'yard'
+end
