@@ -25,7 +25,7 @@ module Guard
 
         # Tests if the file is valid.
         #
-        # @param [String] file the file
+        # @param [String] path the file
         # @param [Hash] options the clean options
         # @option options [String] :missing_ok don't remove missing files from list
         # @return [Boolean] when the file valid

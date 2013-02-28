@@ -9,7 +9,7 @@ module Guard
         # creates nested directories and the output file, writes the result
         # to the console and triggers optional system notifications.
         #
-        # @param [Array<String>] paths the spec files or directories
+        # @param [Array<String>] files the spec files or directories
         # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
         # @param [Hash] options the options for the execution
         # @option options [String] :input the input directory
@@ -31,7 +31,7 @@ module Guard
         # The remove function deals with CoffeeScript file removal by
         # locating the output javascript file and removing it.
         #
-        # @param [Array<String>] paths the spec files or directories
+        # @param [Array<String>] files the spec files or directories
         # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
         # @param [Hash] options the options for the removal
         # @option options [String] :output the output directory
