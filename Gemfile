@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 gemspec
 
@@ -18,6 +18,7 @@ require 'rbconfig'
 
 if RbConfig::CONFIG['target_os'] =~ /darwin/i
   gem 'ruby_gntp', :require => false
+  gem 'rb-fsevent', :require => false
 elsif RbConfig::CONFIG['target_os'] =~ /linux/i
   gem 'libnotify', :require => false
 elsif RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
