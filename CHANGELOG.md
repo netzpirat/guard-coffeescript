@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.3.0 - March 5, 2013
 
 - Add `:source_map` option for CoffeeScript.
 
