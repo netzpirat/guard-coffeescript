@@ -33,7 +33,8 @@ to install the `json` or `json_pure` gem. On Ruby 1.9, JSON is included in the s
 
 ## CoffeeScript
 
-Guard::CoffeeScript uses [Ruby CoffeeScript](https://github.com/josh/ruby-coffee-script/) to compile the CoffeeScripts,
+Guard::CoffeeScript uses [Ruby CoffeeScript](https://github.com/josh/ruby-coffee-script/) or
+[Ruby CoffeeScript Redux](https://github.com/samwgoldman/ruby-coffee-script-redux) to compile the CoffeeScripts,
 that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the best runtime to evaluate the JavaScript.
 
 * With CRuby you want to use a V8 JavaScript Engine or Mozilla SpiderMonkey.
@@ -41,6 +42,9 @@ that in turn uses [ExecJS](https://github.com/sstephenson/execjs) to pick the be
 * On Mac OS X you want to use Apple JavaScriptCore.
 * On Linux or as a node.js developer you want to use Node.js (V8).
 * On Windows you want to use Microsoft Windows Script Host.
+
+If you are using CoffeeScript Redux, you can enable the source map generation by setting the `:source_map` option to
+`true`.
 
 ## JavaScript runtimes
 
@@ -176,6 +180,9 @@ There following options can be passed to Guard::CoffeeScript:
                                     # default: false
 
 :shallow => true                    # Do not create nested output directories.
+                                    # default: false
+
+:source_map => true                 # Do create the source map file.
                                     # default: false
 
 :hide_success => true               # Disable successful compilation messages.

@@ -19,7 +19,8 @@ module Guard
         :hide_success => false,
         :noop         => false,
         :error_to_js  => false,
-        :all_on_start => false
+        :all_on_start => false,
+        :source_map  => false
     }
 
     # Initialize Guard::CoffeeScript.
@@ -33,6 +34,7 @@ module Guard
     # @option options [Boolean] :hide_success hide success message notification
     # @option options [Boolean] :all_on_start generate all JavaScripts files on start
     # @option options [Boolean] :noop do not generate an output file
+    # @option options [Boolean] :source_map generate the source map files
     #
     def initialize(watchers = [], options = {})
       watchers = [] if !watchers
