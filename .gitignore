@@ -3,6 +3,7 @@ pkg/*
 *.rbc
 .bundle
 .yardoc
+.idea
 doc
 Gemfile.lock
 .rbx
