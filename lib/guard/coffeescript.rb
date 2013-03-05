@@ -20,7 +20,7 @@ module Guard
         :noop         => false,
         :error_to_js  => false,
         :all_on_start => false,
-        :source_map  => false
+        :source_map   => false
     }
 
     # Initialize Guard::CoffeeScript.

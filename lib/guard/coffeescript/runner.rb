@@ -118,7 +118,7 @@ module Guard
           file = File.read(filename)
           file_options = options_for_file(file, options)
           js  = ::CoffeeScript.compile(file, file_options)
-          map = options[:source_map] ? ::CoffeeScript.compile(file, file_options.merge(:format => :map)) : nil
+          map = options[:source_map] ? ::CoffeeScript.compile(file, file_options.merge(:sourceMap => true, :filename => file)) : nil
 
           [js, map]
         end

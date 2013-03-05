@@ -2,8 +2,7 @@
 
 ## Master
 
-- Add information about using CoffeeScript Redux.
-- Add `:source_map` option for CoffeeScript Redux.
+- Add `:source_map` option for CoffeeScript.
 
 ## 1.2.1 - November 1, 2012
 
