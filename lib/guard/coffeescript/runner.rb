@@ -117,8 +117,13 @@ module Guard
         def compile(filename, options)
           file = File.read(filename)
           file_options = options_for_file(file, options)
-          js  = ::CoffeeScript.compile(file, file_options)
-          map = options[:source_map] ? ::CoffeeScript.compile(file, file_options.merge(:sourceMap => true, :filename => file)) : nil
+          if options[:source_map]
+            file_options.merge! options_for_source_map(filename, options)
+            result = ::CoffeeScript.compile(file, file_options)
+            js, map = result['js'], result['v3SourceMap']
+          else
+            js  = ::CoffeeScript.compile(file, file_options)
+          end
 
           [js, map]
         end
@@ -137,6 +142,15 @@ module Guard
           file_options[:bare] = file_options[:bare].include?(filename)
 
           file_options
+        end
+
+        # Gets the CoffeeScript source map options.
+        #
+        # @param [String] filename the CoffeeScript filename
+        # @param [Hash] options the options for the execution
+        #
+        def options_for_source_map(filename, options)
+          {:sourceMap => true, :filename => filename}
         end
 
         # Analyzes the CoffeeScript compilation output and creates the
