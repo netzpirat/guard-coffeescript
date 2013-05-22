@@ -147,6 +147,34 @@ describe Guard::CoffeeScript::Runner do
       end
     end
 
+    context 'with the :source_map option' do
+      before do
+        runner.unstub(:compile)
+        ::CoffeeScript.stub(:compile)
+        File.stub(:read) { |file| file }
+      end
+
+      after do
+        runner.stub(:compile).and_return ''
+        ::CoffeeScript.unstub(:compile)
+      end
+
+      it 'compiles with source map file options set' do
+        ::CoffeeScript.should_receive(:compile).with 'src/a.coffee', hash_including({
+          :sourceMap => true,
+          :generatedFile => 'a.js',
+          :sourceFiles => ['a.coffee'],
+          :sourceRoot => 'src',
+        })
+        runner.run(['src/a.coffee'], [watcher], { :output => 'target', :source_map => true, :input => 'src' })
+      end
+
+      it 'accepts a different source_root' do
+        ::CoffeeScript.should_receive(:compile).with 'src/a.coffee', hash_including(:sourceRoot => 'foo')
+        runner.run(['src/a.coffee'], [watcher], { :output => 'target', :source_map => true, :source_root => 'foo' })
+      end
+    end
+
     context 'with compilation errors' do
       context 'without the :noop option' do
         it 'shows the error messages' do
