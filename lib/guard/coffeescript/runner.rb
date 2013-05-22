@@ -178,11 +178,15 @@ module Guard
 
           return filename if options[:noop]
 
+          if options[:source_map]
+            map_name = filename + '.map'
+            js += "\n/*\n//@ sourceMappingURL=#{File.basename(map_name)}\n*/\n"
+          end
+
           FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
           File.open(File.expand_path(filename), 'w') { |f| f.write(js) }
 
           if options[:source_map]
-            map_name = filename + '.map'
             File.open(File.expand_path(map_name), 'w') { |f| f.write(map) }
             [filename, map_name]
           else
