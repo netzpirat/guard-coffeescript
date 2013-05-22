@@ -150,7 +150,15 @@ module Guard
         # @param [Hash] options the options for the execution
         #
         def options_for_source_map(filename, options)
-          {:sourceMap => true, :filename => filename}
+          # if :input was provided, make all filenames relative to that
+          filename = Pathname.new(filename).relative_path_from(Pathname.new(options[:input])).to_s if options[:input]
+
+          {
+            :sourceMap => true,
+            :generatedFile => filename.gsub(/(js\.coffee|coffee)$/, 'js'),
+            :sourceFiles => [filename],
+            :sourceRoot => options[:source_root] || options[:input] || '',
+          }
         end
 
         # Analyzes the CoffeeScript compilation output and creates the
