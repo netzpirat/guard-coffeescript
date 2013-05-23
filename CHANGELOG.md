@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.3.1 - Mai 23, 2013
 
 - [#22][] Improve source map support. ([@rogueg][])
 
