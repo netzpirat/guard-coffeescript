@@ -183,7 +183,7 @@ There following options can be passed to Guard::CoffeeScript:
 
 :source_root => 'coffeescripts'     # Root path for coffeescript sources.
                                     # Used in source map to determine root URL for all sources
-                                    # default: false
+                                    # default: nil (using the `:input` directory)
 
 :hide_success => true               # Disable successful compilation messages.
                                     # default: false

@@ -1,5 +1,9 @@
 # Changelog
 
+## Master
+
+- [#22][] Improve source map support. ([@rogueg][])
+
 ## 1.3.0 - March 5, 2013
 
 - Add `:source_map` option for CoffeeScript.
@@ -129,6 +133,7 @@
 [#10]: https://github.com/netzpirat/guard-coffeescript/issues/10
 [#11]: https://github.com/netzpirat/guard-coffeescript/issues/11
 [#12]: https://github.com/netzpirat/guard-coffeescript/issues/12
+[#22]: https://github.com/netzpirat/guard-coffeescript/issues/22
 [@MyD]: https://github.com/MyD
 [@akahigeg]: https://github.com/akahigeg
 [@damin]: https://github.com/damin
@@ -136,4 +141,5 @@
 [@jqr]: https://github.com/jqr
 [@jtolds]: https://github.com/jtolds
 [@proc]: https://github.com/proc
+[@rogueg]: https://github.com/rogueg
 [@vizjerai]: https://github.com/vizjerai
