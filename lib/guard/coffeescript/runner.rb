@@ -117,8 +117,13 @@ module Guard
         def compile(filename, options)
           file = File.read(filename)
           file_options = options_for_file(file, options)
-          js  = ::CoffeeScript.compile(file, file_options)
-          map = options[:source_map] ? ::CoffeeScript.compile(file, file_options.merge(:sourceMap => true, :filename => file)) : nil
+          if options[:source_map]
+            file_options.merge! options_for_source_map(filename, options)
+            result = ::CoffeeScript.compile(file, file_options)
+            js, map = result['js'], result['v3SourceMap']
+          else
+            js  = ::CoffeeScript.compile(file, file_options)
+          end
 
           [js, map]
         end
@@ -139,6 +144,23 @@ module Guard
           file_options
         end
 
+        # Gets the CoffeeScript source map options.
+        #
+        # @param [String] filename the CoffeeScript filename
+        # @param [Hash] options the options for the execution
+        #
+        def options_for_source_map(filename, options)
+          # if :input was provided, make all filenames relative to that
+          filename = Pathname.new(filename).relative_path_from(Pathname.new(options[:input])).to_s if options[:input]
+
+          {
+            :sourceMap => true,
+            :generatedFile => filename.gsub(/(js\.coffee|coffee)$/, 'js'),
+            :sourceFiles => [filename],
+            :sourceRoot => options[:source_root] || options[:input] || '',
+          }
+        end
+
         # Analyzes the CoffeeScript compilation output and creates the
         # nested directories and writes the output file.
         #
@@ -156,11 +178,15 @@ module Guard
 
           return filename if options[:noop]
 
+          if options[:source_map]
+            map_name = filename + '.map'
+            js += "\n/*\n//@ sourceMappingURL=#{File.basename(map_name)}\n*/\n"
+          end
+
           FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
           File.open(File.expand_path(filename), 'w') { |f| f.write(js) }
 
           if options[:source_map]
-            map_name = filename + '.map'
             File.open(File.expand_path(map_name), 'w') { |f| f.write(map) }
             [filename, map_name]
           else
