@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.3.2 - Mai 30, 2013
 
 - [#11](https://github.com/guard/guard-coffeescript/issues/11) Improve source map support. ([@jabbawookiees][])
 
