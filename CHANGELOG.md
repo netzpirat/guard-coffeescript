@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.3.3 - September 9, 2013
 
 - [#24](https://github.com/netzpirat/guard-coffeescript/issues/24) Fix selective `bare` option.
 
