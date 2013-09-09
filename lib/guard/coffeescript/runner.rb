@@ -116,7 +116,8 @@ module Guard
         #
         def compile(filename, options)
           file = File.read(filename)
-          file_options = options_for_file(file, options)
+          file_options = options_for_file(filename, options)
+
           if options[:source_map]
             file_options.merge! options_for_source_map(filename, options)
             result = ::CoffeeScript.compile(file, file_options)
