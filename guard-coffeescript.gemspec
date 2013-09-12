@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/netzpirat/guard-coffeescript'
   s.summary     = 'Guard gem for CoffeeScript'
   s.description = 'Guard::CoffeeScript automatically generates your JavaScripts from your CoffeeScripts'
+  s.license = 'MIT'
 
   s.required_rubygems_version = '>= 1.3.6'
   s.rubyforge_project = 'guard-coffeescript'
