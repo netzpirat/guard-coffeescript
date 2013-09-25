@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.3.4 - September 25, 2013
 
 - [#12](https://github.com/guard/guard-coffeescript/issues/12) Fix `:hide_success` after a failure. ([@whatcould][])
 
