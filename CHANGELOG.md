@@ -1,5 +1,9 @@
 # Changelog
 
+## Master
+
+- [#12](https://github.com/guard/guard-coffeescript/issues/12) Fix `:hide_success` after a failure. ([@whatcould][])
+
 ## 1.3.3 - September 9, 2013
 
 - [#24](https://github.com/netzpirat/guard-coffeescript/issues/24) Fix selective `bare` option.
@@ -145,3 +149,4 @@
 [@proc]: https://github.com/proc
 [@rogueg]: https://github.com/rogueg
 [@vizjerai]: https://github.com/vizjerai
+[@whatcould]: https://github.com/whatcould
