@@ -129,23 +129,23 @@ describe Guard::CoffeeScript do
       Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee']
     end
 
-    it 'runs the run_on_changes with all watched CoffeeScripts' do
-      guard.should_receive(:run_on_changes).with(['x/a.coffee', 'x/b.coffee'])
+    it 'runs the run_on_modifications with all watched CoffeeScripts' do
+      guard.should_receive(:run_on_modifications).with(['x/a.coffee', 'x/b.coffee'])
       guard.run_all
     end
   end
 
-  describe '#run_on_changes' do
+  describe '#run_on_modifications' do
     it 'throws :task_has_failed when an error occurs' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [[], false]
-      expect { guard.run_on_changes(['a.coffee', 'b.coffee']) }.to throw_symbol :task_has_failed
+      expect { guard.run_on_modifications(['a.coffee', 'b.coffee']) }.to throw_symbol :task_has_failed
     end
 
     it 'starts the Runner with the cleaned files' do
       inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
       runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [['a.js'], true]
-      guard.run_on_changes(['a.coffee', 'b.coffee'])
+      guard.run_on_modifications(['a.coffee', 'b.coffee'])
     end
   end
 

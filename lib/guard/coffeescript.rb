@@ -61,7 +61,7 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_all
-      run_on_changes(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.coffee')))
+      run_on_modifications(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.coffee')))
     end
 
     # Gets called when watched paths and files have changes.
@@ -69,7 +69,7 @@ module Guard
     # @param [Array<String>] paths the changed paths and files
     # @raise [:task_has_failed] when stop has failed
     #
-    def run_on_changes(paths)
+    def run_on_modifications(paths)
       changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
 
       throw :task_has_failed unless success
