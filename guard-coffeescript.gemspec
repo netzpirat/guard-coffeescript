@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Guard::CoffeeScriptVersion::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Michael Kessler']
-  s.email       = ['michi@netzpiraten.ch']
+  s.email       = ['michi@flinkfinger.com']
   s.homepage    = 'http://github.com/netzpirat/guard-coffeescript'
   s.summary     = 'Guard gem for CoffeeScript'
   s.description = 'Guard::CoffeeScript automatically generates your JavaScripts from your CoffeeScripts'
