@@ -329,7 +329,7 @@ For questions please join us in our [Google group](http://groups.google.com/grou
 
 ## Author
 
-Developed by Michael Kessler, sponsored by [mksoft.ch](https://mksoft.ch).
+Developed by Michael Kessler, sponsored by [FlinkFinger](http://www.flinkfinger.com).
 
 If you like Guard::CoffeeScript, you can watch the repository at [GitHub](https://github.com/netzpirat/guard-coffeescript) and
 follow [@netzpirat](https://twitter.com/#!/netzpirat) on Twitter for project updates.
