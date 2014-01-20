@@ -3,7 +3,7 @@
 Guard::CoffeeScript compiles or validates your CoffeeScripts automatically when files are modified.
 If you're looking for a CoffeeScript merge tool, please checkout [Guard::CoffeeDripper](https://github.com/guard/guard-coffeedripper).
 
-Tested on MRI Ruby 1.8.7, 1.9.2, 1.9.3, REE and the latest versions of JRuby & Rubinius.
+Tested on MRI Ruby 1.9.3, 2.0.0, 2.1.0 and the latest versions of JRuby & Rubinius.
 
 If you have any questions please join us on our [Google group](http://groups.google.com/group/guard-dev) or on `#guard`
 (irc.freenode.net).
