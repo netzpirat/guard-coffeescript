@@ -141,7 +141,7 @@ module Guard
           return options unless options[:bare].respond_to? :include?
 
           file_options        = options.clone
-          filename            = file[/([^\/]*)\.coffee/]
+          filename            = file[/([^\/]*)\.(?:coffee|coffee\.md|litcoffee)$/]
           file_options[:bare] = file_options[:bare].include?(filename)
 
           file_options
@@ -158,7 +158,7 @@ module Guard
 
           {
             :sourceMap => true,
-            :generatedFile => filename.gsub(/(js\.coffee|coffee)$/, 'js'),
+            :generatedFile => filename.gsub(/(js\.coffee|coffee|coffee\.md|litcoffee)$/, 'js'),
             :sourceFiles => [filename],
             :sourceRoot => options[:source_root] || options[:input] || '',
           }
@@ -204,7 +204,7 @@ module Guard
         # @param [String] directory the output directory
         #
         def javascript_file_name(file, directory)
-          File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
+          File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee|coffee\.md|litcoffee)$/, 'js')))
         end
 
         # Detects the output directory for each CoffeeScript file. Builds

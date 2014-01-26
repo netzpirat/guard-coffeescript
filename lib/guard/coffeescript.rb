@@ -42,7 +42,7 @@ module Guard
 
       if options[:input]
         defaults.merge!({ :output => options[:input] })
-        watchers << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.coffee)$})
+        watchers << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.(?:coffee|coffee\.md|litcoffee))$})
       end
 
       super(watchers, defaults.merge(options))
@@ -61,7 +61,7 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_all
-      run_on_modifications(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.coffee')))
+      run_on_modifications(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.{coffee,coffee.md,litcoffee}')))
     end
 
     # Gets called when watched paths and files have changes.
