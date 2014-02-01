@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## 1.4.0 - Februar 1, 2014
 
 - [#29](https://github.com/netzpirat/guard-coffeescript/issues/29) Add support for compiling literate coffeescript. ([@oychang][])
 
