@@ -1,5 +1,9 @@
 # Changelog
 
+## Master
+
+- [#29](https://github.com/netzpirat/guard-coffeescript/issues/29) Add support for compiling literate coffeescript. ([@oychang][])
+
 ## 1.3.4 - September 25, 2013
 
 - [#12](https://github.com/guard/guard-coffeescript/issues/12) Fix `:hide_success` after a failure. ([@whatcould][])
@@ -143,9 +147,10 @@
 [@damin]: https://github.com/damin
 [@hoverbird]: https://github.com/hoverbird
 [@jabbawookiees]: https://github.com/jabbawookiees
-[@jraines]: https://github.com/jraines
 [@jqr]: https://github.com/jqr
+[@jraines]: https://github.com/jraines
 [@jtolds]: https://github.com/jtolds
+[@oychang]: https://github.com/oychang
 [@proc]: https://github.com/proc
 [@rogueg]: https://github.com/rogueg
 [@vizjerai]: https://github.com/vizjerai
