@@ -85,8 +85,8 @@ describe Guard::CoffeeScript do
         guard.should have(1).watchers
       end
 
-      it 'watches all *.coffee files' do
-        guard.watchers.first.pattern.should eql %r{^app/coffeescripts/(.+\.coffee)$}
+      it 'watches all *.{coffee,coffee.md,litcoffee} files' do
+        guard.watchers.first.pattern.should eql %r{^app/coffeescripts/(.+\.(?:coffee|coffee\.md|litcoffee))$}
       end
 
       context 'without an output option' do
@@ -123,14 +123,14 @@ describe Guard::CoffeeScript do
   end
 
   describe '#run_all' do
-    let(:guard) { Guard::CoffeeScript.new([Guard::Watcher.new('^x/(.*)\.coffee')]) }
+    let(:guard) { Guard::CoffeeScript.new([Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')]) }
 
     before do
-      Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee']
+      Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee', 'x/d.coffeeemd', 'x/e.litcoffee']
     end
 
     it 'runs the run_on_modifications with all watched CoffeeScripts' do
-      guard.should_receive(:run_on_modifications).with(['x/a.coffee', 'x/b.coffee'])
+      guard.should_receive(:run_on_modifications).with(['x/a.coffee', 'x/b.coffee', 'x/e.litcoffee'])
       guard.run_all
     end
   end

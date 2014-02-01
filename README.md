@@ -162,7 +162,8 @@ There following options can be passed to Guard::CoffeeScript:
 
 ```ruby
 :input => 'coffeescripts'           # Relative path to the input directory.
-                                    # A suffix /(.+\.coffee) will be added to this option.
+                                    # Files will be added that match a suffix
+                                    # of /(.+\.(coffee|coffee\.md|litcoffee))
                                     # default: nil
 
 :output => 'javascripts'            # Relative path to the output directory.
@@ -172,7 +173,8 @@ There following options can be passed to Guard::CoffeeScript:
                                     # default: false
 
 :bare => true                       # Compile without the top-level function wrapper.
-                                    # Provide either a boolean value or an Array of filenames.
+                                    # Provide either a boolean value or an Array of
+                                    # filenames.
                                     # default: false
 
 :shallow => true                    # Do not create nested output directories.
@@ -182,7 +184,8 @@ There following options can be passed to Guard::CoffeeScript:
                                     # default: false
 
 :source_root => 'coffeescripts'     # Root path for coffeescript sources.
-                                    # Used in source map to determine root URL for all sources
+                                    # Used in source map to determine root URL for
+                                    # all sources
                                     # default: nil (using the `:input` directory)
 
 :hide_success => true               # Disable successful compilation messages.
@@ -191,8 +194,8 @@ There following options can be passed to Guard::CoffeeScript:
 :all_on_start => true               # Regenerate all files on startup
                                     # default: false
 
-:error_to_js => true                # Print the Coffeescript error message directly in the
-                                    # JavaScript file
+:error_to_js => true                # Print the Coffeescript error message directly in
+                                    # the JavaScript file
                                     # default: false
 ```
 

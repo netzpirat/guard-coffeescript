@@ -31,7 +31,7 @@ module Guard
         # @return [Boolean] when the file valid
         #
         def coffee_file?(path, options)
-          path =~ /.coffee$/ && (options[:missing_ok] || File.exists?(path))
+          path =~ /\.(?:coffee|coffee\.md|litcoffee)$/ && (options[:missing_ok] || File.exists?(path))
         end
 
       end

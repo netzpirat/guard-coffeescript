@@ -134,15 +134,22 @@ module Guard
         # Gets the CoffeeScript compilation options.
         #
         # @param [String] file the CoffeeScript file
-        # @param [Hash] options the options for the execution
+        # @param [Hash] options the options for the execution of all files
         # @option options [Boolean] :bare do not wrap the output in a top level function
+        # @return [Hash] options for a particular file's execution
         #
         def options_for_file(file, options)
-          return options unless options[:bare].respond_to? :include?
+          file_options = options.clone
 
-          file_options        = options.clone
-          filename            = file[/([^\/]*)\.coffee/]
-          file_options[:bare] = file_options[:bare].include?(filename)
+          # if :bare was provided an array of filenames, check for file's inclusion
+          if file_options[:bare].respond_to? :include?
+            filename            = file[/([^\/]*)\.(?:coffee|coffee\.md|litcoffee)$/]
+            file_options[:bare] = file_options[:bare].include?(filename)
+          end
+
+          if file[/\.(?:coffee\.md|litcoffee)$/]
+            file_options[:literate] = true
+          end
 
           file_options
         end
@@ -158,7 +165,7 @@ module Guard
 
           {
             :sourceMap => true,
-            :generatedFile => filename.gsub(/(js\.coffee|coffee)$/, 'js'),
+            :generatedFile => filename.gsub(/((?:js\.)?(?:coffee|coffee\.md|litcoffee))$/, 'js'),
             :sourceFiles => [filename],
             :sourceRoot => options[:source_root] || options[:input] || '',
           }
@@ -204,7 +211,7 @@ module Guard
         # @param [String] directory the output directory
         #
         def javascript_file_name(file, directory)
-          File.join(directory, File.basename(file.gsub(/(js\.coffee|coffee)$/, 'js')))
+          File.join(directory, File.basename(file.gsub(/((?:js\.)?(?:coffee|coffee\.md|litcoffee))$/, 'js')))
         end
 
         # Detects the output directory for each CoffeeScript file. Builds
