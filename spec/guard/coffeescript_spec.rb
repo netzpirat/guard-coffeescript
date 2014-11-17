@@ -18,7 +18,6 @@ describe Guard::CoffeeScript do
   describe '#initialize' do
     context 'when no options are provided' do
       it 'sets a default :watchers option' do
-        puts guard.options
         guard.watchers.should be_a Array
         guard.watchers.should be_empty
       end
