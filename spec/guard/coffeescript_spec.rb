@@ -17,6 +17,12 @@ describe Guard::CoffeeScript do
 
   describe '#initialize' do
     context 'when no options are provided' do
+      it 'sets a default :watchers option' do
+        puts guard.options
+        guard.watchers.should be_a Array
+        guard.watchers.should be_empty
+      end
+
       it 'sets a default :wrap option' do
         guard.options[:bare].should be_false
       end
@@ -44,14 +50,21 @@ describe Guard::CoffeeScript do
     end
 
     context 'with options besides the defaults' do
-      let(:guard) { Guard::CoffeeScript.new(nil, { :output       => 'output_folder',
+      let(:watcher) { Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$') }
+
+      let(:guard) { Guard::CoffeeScript.new( { :output       => 'output_folder',
                                                    :bare         => true,
                                                    :shallow      => true,
                                                    :hide_success => true,
                                                    :all_on_start => true,
                                                    :noop         => true,
-                                                   :source_map  => true
+                                                   :source_map  => true,
+                                                   :watchers     => [watcher]
       }) }
+
+      it 'sets the provided :watchers option' do
+        guard.watchers.should == [watcher]
+      end
 
       it 'sets the provided :bare option' do
         guard.options[:bare].should be_true
@@ -79,7 +92,7 @@ describe Guard::CoffeeScript do
     end
 
     context 'with a input option' do
-      let(:guard) { Guard::CoffeeScript.new(nil, { :input => 'app/coffeescripts' }) }
+      let(:guard) { Guard::CoffeeScript.new( { :input => 'app/coffeescripts' }) }
 
       it 'creates a watcher' do
         guard.should have(1).watchers
@@ -96,7 +109,7 @@ describe Guard::CoffeeScript do
       end
 
       context 'with an output option' do
-        let(:guard) { Guard::CoffeeScript.new(nil, { :input  => 'app/coffeescripts',
+        let(:guard) { Guard::CoffeeScript.new( { :input  => 'app/coffeescripts',
                                                      :output => 'public/javascripts' }) }
 
         it 'keeps the output directory' do
@@ -113,7 +126,7 @@ describe Guard::CoffeeScript do
     end
 
     context 'with the :all_on_start option' do
-      let(:guard) { Guard::CoffeeScript.new(nil, :all_on_start => true) }
+      let(:guard) { Guard::CoffeeScript.new( :all_on_start => true) }
 
       it 'calls #run_all' do
         guard.should_receive(:run_all)
@@ -123,7 +136,7 @@ describe Guard::CoffeeScript do
   end
 
   describe '#run_all' do
-    let(:guard) { Guard::CoffeeScript.new([Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')]) }
+    let(:guard) { Guard::CoffeeScript.new( { :watchers => [Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')] } ) }
 
     before do
       Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee', 'x/d.coffeeemd', 'x/e.litcoffee']

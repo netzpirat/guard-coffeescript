@@ -1,5 +1,5 @@
 require 'guard'
-require 'guard/guard'
+require 'guard/plugin'
 require 'guard/watcher'
 
 module Guard
@@ -7,7 +7,7 @@ module Guard
   # The CoffeeScript guard that gets notifications about the following
   # Guard events: `start`, `stop`, `reload`, `run_all` and `run_on_change`.
   #
-  class CoffeeScript < Guard
+  class CoffeeScript < Plugin
 
     autoload :Formatter, 'guard/coffeescript/formatter'
     autoload :Inspector, 'guard/coffeescript/inspector'
@@ -25,10 +25,11 @@ module Guard
 
     # Initialize Guard::CoffeeScript.
     #
-    # @param [Array<Guard::Watcher>] watchers the watchers in the Guard block
+    
     # @param [Hash] options the options for the Guard
     # @option options [String] :input the input directory
     # @option options [String] :output the output directory
+    # @option options [Array<Guard::Watcher>] :watchers the watchers in the Guard block
     # @option options [Boolean] :bare do not wrap the output in a top level function
     # @option options [Boolean] :shallow do not create nested directories
     # @option options [Boolean] :hide_success hide success message notification
@@ -36,16 +37,16 @@ module Guard
     # @option options [Boolean] :noop do not generate an output file
     # @option options [Boolean] :source_map generate the source map files
     #
-    def initialize(watchers = [], options = {})
-      watchers = [] if !watchers
+    def initialize(options = {})
       defaults = DEFAULT_OPTIONS.clone
 
       if options[:input]
         defaults.merge!({ :output => options[:input] })
-        watchers << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.(?:coffee|coffee\.md|litcoffee))$})
+        options[:watchers] = [] unless options[:watchers]
+        options[:watchers] << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.(?:coffee|coffee\.md|litcoffee))$})
       end
 
-      super(watchers, defaults.merge(options))
+      super(defaults.merge(options))
     end
 
     # Gets called once when Guard starts.
