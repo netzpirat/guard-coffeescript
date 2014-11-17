@@ -42,7 +42,7 @@ module Guard
         #
         def remove(files, watchers, options = { })
           removed_files = []
-          directories   = detect_nested_directories(watchers, files, options)
+          directories   = detect_nested_directories(files, watchers, options)
 
           directories.each do |directory, scripts|
             scripts.each do |file|
@@ -76,15 +76,14 @@ module Guard
 
         # Compiles all CoffeeScript files and writes the JavaScript files.
         #
-        # @param [Array<String>] files the files to compile
-        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Array<String>] files the files to compile        
         # @param [Hash] options the options for the execution
         # @return [Array<Array<String>, Array<String>] the result for the compilation run
         #
         def compile_files(files, watchers, options)
           errors        = []
           changed_files = []
-          directories   = detect_nested_directories(watchers, files, options)
+          directories   = detect_nested_directories(files, watchers, options)
 
           directories.each do |directory, scripts|
             scripts.each do |file|
@@ -217,14 +216,14 @@ module Guard
         # Detects the output directory for each CoffeeScript file. Builds
         # the product of all watchers and assigns to each directory
         # the files to which it belongs to.
-        #
-        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        #        
         # @param [Array<String>] files the CoffeeScript files
-        # @param [Hash] options the options for the execution
+        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Hash] options the options for the execution       
         # @option options [String] :output the output directory
         # @option options [Boolean] :shallow do not create nested directories
         #
-        def detect_nested_directories(watchers, files, options)
+        def detect_nested_directories(files, watchers, options)
           return { options[:output] => files } if options[:shallow]
 
           directories = { }
