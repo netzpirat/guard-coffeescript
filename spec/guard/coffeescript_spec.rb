@@ -10,40 +10,40 @@ describe Guard::CoffeeScript do
   let(:defaults) { Guard::CoffeeScript::DEFAULT_OPTIONS }
 
   before do
-    inspector.stub(:clean)
-    runner.stub(:run)
-    runner.stub(:remove)
+    allow(inspector).to receive(:clean)
+    allow(runner).to receive(:run)
+    allow(runner).to receive(:remove)
   end
 
   describe '#initialize' do
     context 'when no options are provided' do
       it 'sets a default :watchers option' do
-        guard.watchers.should be_a Array
-        guard.watchers.should be_empty
+        expect(guard.watchers).to be_a Array
+        expect(guard.watchers).to be_empty
       end
 
       it 'sets a default :wrap option' do
-        guard.options[:bare].should be_false
+        expect(guard.options[:bare]).to be_falsey
       end
 
       it 'sets a default :shallow option' do
-        guard.options[:shallow].should be_false
+        expect(guard.options[:shallow]).to be_falsey
       end
 
       it 'sets a default :hide_success option' do
-        guard.options[:hide_success].should be_false
+        expect(guard.options[:hide_success]).to be_falsey
       end
 
       it 'sets a default :noop option' do
-        guard.options[:noop].should be_false
+        expect(guard.options[:noop]).to be_falsey
       end
 
       it 'sets a default :all_on_start option' do
-        guard.options[:all_on_start].should be_false
+        expect(guard.options[:all_on_start]).to be_falsey
       end
 
       it 'sets the provided :source_maps option' do
-        guard.options[:source_map].should be_false
+        expect(guard.options[:source_map]).to be_falsey
       end
 
     end
@@ -62,31 +62,31 @@ describe Guard::CoffeeScript do
       }) }
 
       it 'sets the provided :watchers option' do
-        guard.watchers.should == [watcher]
+        expect(guard.watchers).to eq([watcher])
       end
 
       it 'sets the provided :bare option' do
-        guard.options[:bare].should be_true
+        expect(guard.options[:bare]).to be_truthy
       end
 
       it 'sets the provided :shallow option' do
-        guard.options[:shallow].should be_true
+        expect(guard.options[:shallow]).to be_truthy
       end
 
       it 'sets the provided :hide_success option' do
-        guard.options[:hide_success].should be_true
+        expect(guard.options[:hide_success]).to be_truthy
       end
 
       it 'sets the provided :noop option' do
-        guard.options[:noop].should be_true
+        expect(guard.options[:noop]).to be_truthy
       end
 
       it 'sets the provided :all_on_start option' do
-        guard.options[:all_on_start].should be_true
+        expect(guard.options[:all_on_start]).to be_truthy
       end
 
       it 'sets the provided :source_maps option' do
-        guard.options[:source_map].should be_true
+        expect(guard.options[:source_map]).to be_truthy
       end
     end
 
@@ -94,16 +94,16 @@ describe Guard::CoffeeScript do
       let(:guard) { Guard::CoffeeScript.new( { :input => 'app/coffeescripts' }) }
 
       it 'creates a watcher' do
-        guard.should have(1).watchers
+        expect(guard.watchers.size).to eq(1)
       end
 
       it 'watches all *.{coffee,coffee.md,litcoffee} files' do
-        guard.watchers.first.pattern.should eql %r{^app/coffeescripts/(.+\.(?:coffee|coffee\.md|litcoffee))$}
+        expect(guard.watchers.first.pattern).to eql %r{^app/coffeescripts/(.+\.(?:coffee|coffee\.md|litcoffee))$}
       end
 
       context 'without an output option' do
         it 'sets the output directory to the input directory' do
-          guard.options[:output].should eql 'app/coffeescripts'
+          expect(guard.options[:output]).to eql 'app/coffeescripts'
         end
       end
 
@@ -112,7 +112,7 @@ describe Guard::CoffeeScript do
                                                      :output => 'public/javascripts' }) }
 
         it 'keeps the output directory' do
-          guard.options[:output].should eql 'public/javascripts'
+          expect(guard.options[:output]).to eql 'public/javascripts'
         end
       end
     end
@@ -120,7 +120,7 @@ describe Guard::CoffeeScript do
 
   describe '#start' do
     it 'calls #run_all' do
-      guard.should_not_receive(:run_all)
+      expect(guard).not_to receive(:run_all)
       guard.start
     end
 
@@ -128,7 +128,7 @@ describe Guard::CoffeeScript do
       let(:guard) { Guard::CoffeeScript.new( :all_on_start => true) }
 
       it 'calls #run_all' do
-        guard.should_receive(:run_all)
+        expect(guard).to receive(:run_all)
         guard.start
       end
     end
@@ -138,38 +138,38 @@ describe Guard::CoffeeScript do
     let(:guard) { Guard::CoffeeScript.new( { :watchers => [Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')] } ) }
 
     before do
-      Dir.stub(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee', 'x/d.coffeeemd', 'x/e.litcoffee']
+      allow(Dir).to receive(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee', 'x/d.coffeeemd', 'x/e.litcoffee']
     end
 
     it 'runs the run_on_modifications with all watched CoffeeScripts' do
-      guard.should_receive(:run_on_modifications).with(['x/a.coffee', 'x/b.coffee', 'x/e.litcoffee'])
+      expect(guard).to receive(:run_on_modifications).with(['x/a.coffee', 'x/b.coffee', 'x/e.litcoffee'])
       guard.run_all
     end
   end
 
   describe '#run_on_modifications' do
     it 'throws :task_has_failed when an error occurs' do
-      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
-      runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [[], false]
+      expect(inspector).to receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
+      expect(runner).to receive(:run).with(['a.coffee'], [], defaults).and_return [[], false]
       expect { guard.run_on_modifications(['a.coffee', 'b.coffee']) }.to throw_symbol :task_has_failed
     end
 
     it 'starts the Runner with the cleaned files' do
-      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
-      runner.should_receive(:run).with(['a.coffee'], [], defaults).and_return [['a.js'], true]
+      expect(inspector).to receive(:clean).with(['a.coffee', 'b.coffee']).and_return ['a.coffee']
+      expect(runner).to receive(:run).with(['a.coffee'], [], defaults).and_return [['a.js'], true]
       guard.run_on_modifications(['a.coffee', 'b.coffee'])
     end
   end
 
   describe '#run_on_removals' do
     it 'cleans the paths accepting missing files' do
-      inspector.should_receive(:clean).with(['a.coffee', 'b.coffee'], { :missing_ok => true })
+      expect(inspector).to receive(:clean).with(['a.coffee', 'b.coffee'], { :missing_ok => true })
       guard.run_on_removals(['a.coffee', 'b.coffee'])
     end
 
     it 'removes the files' do
-      inspector.should_receive(:clean).and_return ['a.coffee', 'b.coffee']
-      runner.should_receive(:remove).with(['a.coffee', 'b.coffee'], guard.watchers, guard.options)
+      expect(inspector).to receive(:clean).and_return ['a.coffee', 'b.coffee']
+      expect(runner).to receive(:remove).with(['a.coffee', 'b.coffee'], guard.watchers, guard.options)
       guard.run_on_removals(['a.coffee', 'b.coffee'])
     end
   end
