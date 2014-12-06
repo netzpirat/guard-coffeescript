@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Guard::CoffeeScript do
+RSpec.describe Guard::CoffeeScript do
 
   let(:guard) { Guard::CoffeeScript.new }
 

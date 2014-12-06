@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Guard::CoffeeScript::Formatter do
+RSpec.describe Guard::CoffeeScript::Formatter do
 
   let(:formatter) { Guard::CoffeeScript::Formatter }
   let(:ui) { Guard::UI }

@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Guard::CoffeeScript::Runner do
+RSpec.describe Guard::CoffeeScript::Runner do
   let(:runner) { Guard::CoffeeScript::Runner }
   let(:watcher) { Guard::Watcher.new('^(.+)\.(?:coffee|coffee\.md|litcoffee)$') }
   let(:formatter) { Guard::CoffeeScript::Formatter }

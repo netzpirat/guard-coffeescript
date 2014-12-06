@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe Guard::CoffeeScript::Inspector do
+RSpec.describe Guard::CoffeeScript::Inspector do
   let(:inspector) { Guard::CoffeeScript::Inspector }
 
   describe 'clean' do
