@@ -13,7 +13,6 @@ end
 unless ENV['TRAVIS']
   gem 'redcarpet'
   gem 'yard'
-  gem 'transpec'
 end
 
 platforms :rbx do
