@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
+$LOAD_PATH.push File.expand_path('../lib', __FILE__)
 require 'guard/coffeescript/version'
 
 Gem::Specification.new do |s|
@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'rspec', '~> 3.1'
 
-  s.files        = Dir.glob('{lib}/**/*') + %w[LICENSE README.md]
+  s.files        = Dir.glob('{lib}/**/*') + %w(LICENSE README.md)
   s.require_path = 'lib'
 end

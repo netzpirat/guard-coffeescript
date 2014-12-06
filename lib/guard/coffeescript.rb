@@ -3,29 +3,27 @@ require 'guard/plugin'
 require 'guard/watcher'
 
 module Guard
-
   # The CoffeeScript guard that gets notifications about the following
   # Guard events: `start`, `stop`, `reload`, `run_all` and `run_on_change`.
   #
   class CoffeeScript < Plugin
-
     autoload :Formatter, 'guard/coffeescript/formatter'
     autoload :Inspector, 'guard/coffeescript/inspector'
     autoload :Runner, 'guard/coffeescript/runner'
 
     DEFAULT_OPTIONS = {
-        :bare         => false,
-        :shallow      => false,
-        :hide_success => false,
-        :noop         => false,
-        :error_to_js  => false,
-        :all_on_start => false,
-        :source_map   => false
+      bare: false,
+      shallow: false,
+      hide_success: false,
+      noop: false,
+      error_to_js: false,
+      all_on_start: false,
+      source_map: false
     }
 
     # Initialize Guard::CoffeeScript.
     #
-    
+
     # @param [Hash] options the options for the Guard
     # @option options [String] :input the input directory
     # @option options [String] :output the output directory
@@ -41,7 +39,7 @@ module Guard
       defaults = DEFAULT_OPTIONS.clone
 
       if options[:input]
-        defaults.merge!({ :output => options[:input] })
+        defaults.merge!(output: options[:input])
         options[:watchers] = [] unless options[:watchers]
         options[:watchers] << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.(?:coffee|coffee\.md|litcoffee))$})
       end
@@ -71,7 +69,7 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_on_modifications(paths)
-      changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
+      _changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
 
       throw :task_has_failed unless success
     end
@@ -82,8 +80,7 @@ module Guard
     # @raise [:task_has_failed] when run_on_change has failed
     #
     def run_on_removals(paths)
-      Runner.remove(Inspector.clean(paths, :missing_ok => true), watchers, options)
+      Runner.remove(Inspector.clean(paths, missing_ok: true), watchers, options)
     end
-
   end
 end

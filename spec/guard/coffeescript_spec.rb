@@ -1,5 +1,4 @@
 RSpec.describe Guard::CoffeeScript do
-
   let(:guard) { Guard::CoffeeScript.new }
 
   let(:runner) { Guard::CoffeeScript::Runner }
@@ -43,21 +42,22 @@ RSpec.describe Guard::CoffeeScript do
       it 'sets the provided :source_maps option' do
         expect(guard.options[:source_map]).to be_falsey
       end
-
     end
 
     context 'with options besides the defaults' do
       let(:watcher) { Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$') }
 
-      let(:guard) { Guard::CoffeeScript.new( { :output       => 'output_folder',
-                                                   :bare         => true,
-                                                   :shallow      => true,
-                                                   :hide_success => true,
-                                                   :all_on_start => true,
-                                                   :noop         => true,
-                                                   :source_map  => true,
-                                                   :watchers     => [watcher]
-      }) }
+      let(:guard) do
+        Guard::CoffeeScript.new(output: 'output_folder',
+                                bare: true,
+                                shallow: true,
+                                hide_success: true,
+                                all_on_start: true,
+                                noop: true,
+                                source_map: true,
+                                watchers: [watcher]
+      )
+      end
 
       it 'sets the provided :watchers option' do
         expect(guard.watchers).to eq([watcher])
@@ -89,7 +89,7 @@ RSpec.describe Guard::CoffeeScript do
     end
 
     context 'with a input option' do
-      let(:guard) { Guard::CoffeeScript.new( { :input => 'app/coffeescripts' }) }
+      let(:guard) { Guard::CoffeeScript.new(input: 'app/coffeescripts') }
 
       it 'creates a watcher' do
         expect(guard.watchers.size).to eq(1)
@@ -106,8 +106,10 @@ RSpec.describe Guard::CoffeeScript do
       end
 
       context 'with an output option' do
-        let(:guard) { Guard::CoffeeScript.new( { :input  => 'app/coffeescripts',
-                                                     :output => 'public/javascripts' }) }
+        let(:guard) do
+          Guard::CoffeeScript.new(input: 'app/coffeescripts',
+                                  output: 'public/javascripts')
+        end
 
         it 'keeps the output directory' do
           expect(guard.options[:output]).to eql 'public/javascripts'
@@ -123,7 +125,7 @@ RSpec.describe Guard::CoffeeScript do
     end
 
     context 'with the :all_on_start option' do
-      let(:guard) { Guard::CoffeeScript.new( :all_on_start => true) }
+      let(:guard) { Guard::CoffeeScript.new(all_on_start: true) }
 
       it 'calls #run_all' do
         expect(guard).to receive(:run_all)
@@ -133,7 +135,7 @@ RSpec.describe Guard::CoffeeScript do
   end
 
   describe '#run_all' do
-    let(:guard) { Guard::CoffeeScript.new( { :watchers => [Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')] } ) }
+    let(:guard) { Guard::CoffeeScript.new(watchers: [Guard::Watcher.new('^x/.+\.(?:coffee|coffee\.md|litcoffee)$')]) }
 
     before do
       allow(Dir).to receive(:glob).and_return ['x/a.coffee', 'x/b.coffee', 'y/c.coffee', 'x/d.coffeeemd', 'x/e.litcoffee']
@@ -161,7 +163,7 @@ RSpec.describe Guard::CoffeeScript do
 
   describe '#run_on_removals' do
     it 'cleans the paths accepting missing files' do
-      expect(inspector).to receive(:clean).with(['a.coffee', 'b.coffee'], { :missing_ok => true })
+      expect(inspector).to receive(:clean).with(['a.coffee', 'b.coffee'],  missing_ok: true)
       guard.run_on_removals(['a.coffee', 'b.coffee'])
     end
 

@@ -4,7 +4,6 @@ module Guard
   class CoffeeScript
     module Runner
       class << self
-
         attr_accessor :last_run_failed
 
         # The CoffeeScript runner handles the CoffeeScript compilation,
@@ -23,7 +22,7 @@ module Guard
         # @option options [Boolean] :source_map generate the source map files
         # @return [Array<Array<String>, Boolean>] the result for the compilation run
         #
-        def run(files, watchers, options = { })
+        def run(files, watchers, options = {})
           notify_start(files, options)
           changed_files, errors = compile_files(files, watchers, options)
           notify_result(changed_files, errors, options)
@@ -40,25 +39,25 @@ module Guard
         # @option options [String] :output the output directory
         # @option options [Boolean] :shallow do not create nested directories
         #
-        def remove(files, watchers, options = { })
+        def remove(files, watchers, options = {})
           removed_files = []
           directories   = detect_nested_directories(files, watchers, options)
 
           directories.each do |directory, scripts|
             scripts.each do |file|
               javascript = javascript_file_name(file, directory)
-              if File.exists?(javascript)
+              if File.exist?(javascript)
                 FileUtils.remove_file(javascript)
                 removed_files << javascript
               end
             end
           end
 
-          if removed_files.length > 0
-            message = "Removed #{ removed_files.join(', ') }"
-            Formatter.success(message)
-            Formatter.notify(message, :title => 'CoffeeScript results')
-          end
+          return unless removed_files.length > 0
+
+          message = "Removed #{ removed_files.join(', ') }"
+          Formatter.success(message)
+          Formatter.notify(message, title: 'CoffeeScript results')
         end
 
         private
@@ -71,12 +70,12 @@ module Guard
         #
         def notify_start(files, options)
           message = options[:message] || (options[:noop] ? 'Verify ' : 'Compile ') + files.join(', ')
-          Formatter.info(message, :reset => true)
+          Formatter.info(message, reset: true)
         end
 
         # Compiles all CoffeeScript files and writes the JavaScript files.
         #
-        # @param [Array<String>] files the files to compile        
+        # @param [Array<String>] files the files to compile
         # @param [Hash] options the options for the execution
         # @return [Array<Array<String>, Array<String>] the result for the compilation run
         #
@@ -146,9 +145,7 @@ module Guard
             file_options[:bare] = file_options[:bare].include?(filename)
           end
 
-          if file[/\.(?:coffee\.md|litcoffee)$/]
-            file_options[:literate] = true
-          end
+          file_options[:literate] = true if file[/\.(?:coffee\.md|litcoffee)$/]
 
           file_options
         end
@@ -163,10 +160,10 @@ module Guard
           filename = Pathname.new(filename).relative_path_from(Pathname.new(options[:input])).to_s if options[:input]
 
           {
-            :sourceMap => true,
-            :generatedFile => filename.gsub(/((?:js\.)?(?:coffee|coffee\.md|litcoffee))$/, 'js'),
-            :sourceFiles => [filename],
-            :sourceRoot => options[:source_root] || options[:input] || '',
+            sourceMap: true,
+            generatedFile: filename.gsub(/((?:js\.)?(?:coffee|coffee\.md|litcoffee))$/, 'js'),
+            sourceFiles: [filename],
+            sourceRoot: options[:source_root] || options[:input] || ''
           }
         end
 
@@ -192,7 +189,7 @@ module Guard
             js += "\n/*\n//@ sourceMappingURL=#{File.basename(map_name)}\n*/\n"
           end
 
-          FileUtils.mkdir_p(File.expand_path(directory)) if !File.directory?(directory)
+          FileUtils.mkdir_p(File.expand_path(directory)) unless File.directory?(directory)
           File.open(File.expand_path(filename), 'w') { |f| f.write(js) }
 
           if options[:source_map]
@@ -216,26 +213,26 @@ module Guard
         # Detects the output directory for each CoffeeScript file. Builds
         # the product of all watchers and assigns to each directory
         # the files to which it belongs to.
-        #        
+        #
         # @param [Array<String>] files the CoffeeScript files
         # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
-        # @param [Hash] options the options for the execution       
+        # @param [Hash] options the options for the execution
         # @option options [String] :output the output directory
         # @option options [Boolean] :shallow do not create nested directories
         #
         def detect_nested_directories(files, watchers, options)
           return { options[:output] => files } if options[:shallow]
 
-          directories = { }
+          directories = {}
 
           watchers.product(files).each do |watcher, file|
-            if matches = file.match(watcher.pattern)
-              target = matches[1] ? File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '') : options[:output] || File.dirname(file)
-              if directories[target]
-                directories[target] << file
-              else
-                directories[target] = [file]
-              end
+            next unless (matches = file.match(watcher.pattern))
+
+            target = matches[1] ? File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '') : options[:output] || File.dirname(file)
+            if directories[target]
+              directories[target] << file
+            else
+              directories[target] = [file]
             end
           end
 
@@ -250,18 +247,17 @@ module Guard
         # @option options [Boolean] :hide_success hide success message notification
         # @option options [Boolean] :noop do not generate an output file
         #
-        def notify_result(changed_files, errors, options = { })
+        def notify_result(changed_files, errors, options = {})
           if !errors.empty?
             self.last_run_failed = true
-            Formatter.notify(errors.join("\n"), :title => 'CoffeeScript results', :image => :failed, :priority => 2)
+            Formatter.notify(errors.join("\n"), title: 'CoffeeScript results', image: :failed, priority: 2)
           elsif !options[:hide_success] || last_run_failed
             self.last_run_failed = false
             message = "Successfully #{ options[:noop] ? 'verified' : 'generated' } #{ changed_files.join(', ') }"
             Formatter.success(message)
-            Formatter.notify(message, :title => 'CoffeeScript results')
+            Formatter.notify(message, title: 'CoffeeScript results')
           end
         end
-
       end
     end
   end
