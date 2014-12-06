@@ -1,15 +1,13 @@
-require 'guard'
-require 'guard/plugin'
-require 'guard/watcher'
+require 'guard/compat/plugin'
 
 module Guard
   # The CoffeeScript guard that gets notifications about the following
   # Guard events: `start`, `stop`, `reload`, `run_all` and `run_on_change`.
   #
   class CoffeeScript < Plugin
-    autoload :Formatter, 'guard/coffeescript/formatter'
-    autoload :Inspector, 'guard/coffeescript/inspector'
-    autoload :Runner, 'guard/coffeescript/runner'
+    require 'guard/coffeescript/formatter'
+    require 'guard/coffeescript/inspector'
+    require 'guard/coffeescript/runner'
 
     DEFAULT_OPTIONS = {
       bare: false,
@@ -35,14 +33,21 @@ module Guard
     # @option options [Boolean] :noop do not generate an output file
     # @option options [Boolean] :source_map generate the source map files
     #
+
+    attr_reader :patterns
+
     def initialize(options = {})
       defaults = DEFAULT_OPTIONS.clone
 
-      if options[:input]
-        defaults.merge!(output: options[:input])
-        options[:watchers] = [] unless options[:watchers]
-        options[:watchers] << ::Guard::Watcher.new(%r{^#{ options[:input] }/(.+\.(?:coffee|coffee\.md|litcoffee))$})
-      end
+      @patterns = options.dup.delete(:patterns) || []
+
+      msg = 'Invalid :patterns argument. Expected: Array, got %s'
+      fail ArgumentError, format(msg, @patterns.inspect) unless @patterns.is_a?(Array)
+
+      msg = ':input option not provided (see current template Guardfile)'
+      fail msg unless options[:input]
+
+      options[:output] = options[:input] unless options[:output]
 
       super(defaults.merge(options))
     end
@@ -60,7 +65,14 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_all
-      run_on_modifications(Watcher.match_files(self, Dir.glob('**{,/*/**}/*.{coffee,coffee.md,litcoffee}')))
+      found = Dir.glob('**{,/*/**}/*.{coffee,coffee.md,litcoffee}')
+      found.select! do |file|
+        @patterns.any? do |pattern|
+          pattern.match(file)
+        end
+      end
+
+      run_on_modifications(found)
     end
 
     # Gets called when watched paths and files have changes.
@@ -69,7 +81,7 @@ module Guard
     # @raise [:task_has_failed] when stop has failed
     #
     def run_on_modifications(paths)
-      _changed_files, success = Runner.run(Inspector.clean(paths), watchers, options)
+      _changed_files, success = Runner.run(Inspector.clean(paths), @patterns, options)
 
       throw :task_has_failed unless success
     end
@@ -80,7 +92,7 @@ module Guard
     # @raise [:task_has_failed] when run_on_change has failed
     #
     def run_on_removals(paths)
-      Runner.remove(Inspector.clean(paths, missing_ok: true), watchers, options)
+      Runner.remove(Inspector.clean(paths, missing_ok: true), @patterns, options)
     end
   end
 end

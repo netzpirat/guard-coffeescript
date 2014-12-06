@@ -1,3 +1,4 @@
+require 'guard/compat/test/helper'
 require 'guard/coffeescript'
 
 RSpec.configure do |config|
@@ -31,5 +32,6 @@ RSpec.configure do |config|
     allow(Guard::UI).to receive(:debug)
     allow(Guard::UI).to receive(:error)
     allow(Guard::UI).to receive(:warning)
+    allow(Guard::UI).to receive(:color_enabled?).and_return(true)
   end
 end

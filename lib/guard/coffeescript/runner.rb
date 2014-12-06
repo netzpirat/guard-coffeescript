@@ -11,7 +11,7 @@ module Guard
         # to the console and triggers optional system notifications.
         #
         # @param [Array<String>] files the spec files or directories
-        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Array<Regexp>] patterns the patterns in the block
         # @param [Hash] options the options for the execution
         # @option options [String] :input the input directory
         # @option options [String] :output the output directory
@@ -22,11 +22,10 @@ module Guard
         # @option options [Boolean] :source_map generate the source map files
         # @return [Array<Array<String>, Boolean>] the result for the compilation run
         #
-        def run(files, watchers, options = {})
+        def run(files, patterns, options = {})
           notify_start(files, options)
-          changed_files, errors = compile_files(files, watchers, options)
+          changed_files, errors = compile_files(files, patterns, options)
           notify_result(changed_files, errors, options)
-
           [changed_files, errors.empty?]
         end
 
@@ -34,14 +33,14 @@ module Guard
         # locating the output javascript file and removing it.
         #
         # @param [Array<String>] files the spec files or directories
-        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Array<Regexp>] patterns the patterns in the block
         # @param [Hash] options the options for the removal
         # @option options [String] :output the output directory
         # @option options [Boolean] :shallow do not create nested directories
         #
-        def remove(files, watchers, options = {})
+        def remove(files, patterns, options = {})
           removed_files = []
-          directories   = detect_nested_directories(files, watchers, options)
+          directories   = detect_nested_directories(files, patterns, options)
 
           directories.each do |directory, scripts|
             scripts.each do |file|
@@ -79,10 +78,10 @@ module Guard
         # @param [Hash] options the options for the execution
         # @return [Array<Array<String>, Array<String>] the result for the compilation run
         #
-        def compile_files(files, watchers, options)
+        def compile_files(files, patterns, options)
           errors        = []
           changed_files = []
-          directories   = detect_nested_directories(files, watchers, options)
+          directories   = detect_nested_directories(files, patterns, options)
 
           directories.each do |directory, scripts|
             scripts.each do |file|
@@ -90,7 +89,7 @@ module Guard
                 js, map = compile(file, options)
                 changed_files << write_javascript_file(js, map, file, directory, options)
 
-              rescue => e
+              rescue RuntimeError, ExecJS::ProgramError => e
                 error_message = file + ': ' + e.message.to_s
 
                 if options[:error_to_js]
@@ -121,6 +120,7 @@ module Guard
           if options[:source_map]
             file_options.merge! options_for_source_map(filename, options)
             result = ::CoffeeScript.compile(file, file_options)
+            fail 'CoffeeScript.compile returned nil' if result.nil?
             js, map = result['js'], result['v3SourceMap']
           else
             js  = ::CoffeeScript.compile(file, file_options)
@@ -211,22 +211,22 @@ module Guard
         end
 
         # Detects the output directory for each CoffeeScript file. Builds
-        # the product of all watchers and assigns to each directory
+        # the product of all patterns and assigns to each directory
         # the files to which it belongs to.
         #
         # @param [Array<String>] files the CoffeeScript files
-        # @param [Array<Guard::Watcher>] watchers the Guard watchers in the block
+        # @param [Array<Regexp>] patterns the patterns in the block
         # @param [Hash] options the options for the execution
         # @option options [String] :output the output directory
         # @option options [Boolean] :shallow do not create nested directories
         #
-        def detect_nested_directories(files, watchers, options)
+        def detect_nested_directories(files, patterns, options)
           return { options[:output] => files } if options[:shallow]
 
           directories = {}
 
-          watchers.product(files).each do |watcher, file|
-            next unless (matches = file.match(watcher.pattern))
+          patterns.product(files).each do |pattern, file|
+            next unless (matches = file.match(pattern))
 
             target = matches[1] ? File.join(options[:output], File.dirname(matches[1])).gsub(/\/\.$/, '') : options[:output] || File.dirname(file)
             if directories[target]

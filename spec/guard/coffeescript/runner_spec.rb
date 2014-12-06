@@ -1,6 +1,6 @@
 RSpec.describe Guard::CoffeeScript::Runner do
   let(:runner) { Guard::CoffeeScript::Runner }
-  let(:watcher) { Guard::Watcher.new('^(.+)\.(?:coffee|coffee\.md|litcoffee)$') }
+  let(:pattern) { /^(.+)\.(?:coffee|coffee\.md|litcoffee)$/ }
   let(:formatter) { Guard::CoffeeScript::Formatter }
 
   before do
@@ -30,7 +30,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
     end
 
     context 'without a nested directory' do
-      let(:watcher) { Guard::Watcher.new(%r{src/.+\.(?:coffee|coffee\.md|litcoffee)$}) }
+      let(:pattern) { %r{src/.+\.(?:coffee|coffee\.md|litcoffee)$} }
 
       context 'without the :noop option' do
         it 'compiles the CoffeeScripts to the output and replace .{coffee,coffee.md,litcoffee} with .js' do
@@ -38,7 +38,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/target/a.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/target/b.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/target/c.js", 'w')
-          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [watcher],  output: 'target')
+          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [pattern],  output: 'target')
         end
 
         it 'compiles the CoffeeScripts to the output and replace .js.{coffee,coffee.md,litcoffee} with .js' do
@@ -46,7 +46,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/target/a.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/target/b.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/target/c.js", 'w')
-          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.litcoffee'], [watcher],  output: 'target')
+          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.litcoffee'], [pattern],  output: 'target')
         end
       end
 
@@ -56,7 +56,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/src/a.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/b.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/c.js", 'w')
-          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [watcher])
+          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [pattern])
         end
 
         it 'compiles the CoffeeScripts to the same dir like the file and replace .js.{coffee,coffee.md,litcoffee} with .js' do
@@ -64,7 +64,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/src/a.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/b.js", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/c.js", 'w')
-          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [watcher])
+          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [pattern])
         end
       end
 
@@ -74,7 +74,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).not_to receive(:open).with("#{ @project_path }/target/a.js", 'w')
           expect(File).not_to receive(:open).with("#{ @project_path }/target/b.js", 'w')
           expect(File).not_to receive(:open).with("#{ @project_path }/target/c.js", 'w')
-          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [watcher],  output: 'target', noop: true)
+          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [pattern],  output: 'target', noop: true)
         end
       end
 
@@ -84,7 +84,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/src/a.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/b.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/c.js.map", 'w')
-          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [watcher], source_map: true)
+          runner.run(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [pattern], source_map: true)
         end
 
         it 'compiles the source map to the same dir like the file and replace .js.{coffee,coffee.md,litcoffee} with .js.map' do
@@ -92,13 +92,13 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/src/a.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/b.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/src/c.js.map", 'w')
-          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [watcher], source_map: true)
+          runner.run(['src/a.js.coffee', 'src/b.js.coffee.md', 'src/c.js.litcoffee'], [pattern], source_map: true)
         end
       end
     end
 
     context 'with the :bare option set to an array of filenames' do
-      let(:watcher) { Guard::Watcher.new(%r{src/.+\.(?:coffee|coffee\.md|litcoffee)$}) }
+      let(:pattern) { %r{src/.+\.(?:coffee|coffee\.md|litcoffee)$} }
 
       before do
         allow(runner).to receive(:compile).and_call_original
@@ -109,17 +109,17 @@ RSpec.describe Guard::CoffeeScript::Runner do
 
       it 'should compile files in the list without the outer function wrapper' do
         expect(::CoffeeScript).to receive(:compile).with 'a = -> 1', hash_including(bare: true)
-        runner.run(['src/a.coffee', 'src/b.coffee'], [watcher],  output: 'target', bare: ['a.coffee'])
+        runner.run(['src/a.coffee', 'src/b.coffee'], [pattern],  output: 'target', bare: ['a.coffee'])
       end
 
       it 'should compile files not in the list with the outer function wrapper' do
         expect(::CoffeeScript).to receive(:compile).with 'b = -> 2', hash_including(bare: false)
-        runner.run(['src/a.coffee', 'src/b.coffee'], [watcher],  output: 'target', bare: ['a.coffee'])
+        runner.run(['src/a.coffee', 'src/b.coffee'], [pattern],  output: 'target', bare: ['a.coffee'])
       end
     end
 
     context 'with the :shallow option set to false' do
-      let(:watcher) { Guard::Watcher.new('^app/coffeescripts/(.+)\.(?:coffee|coffee\.md|litcoffee)$') }
+      let(:pattern) { /^app\/coffeescripts\/(.+)\.(?:coffee|coffee\.md|litcoffee)$/ }
 
       it 'compiles the CoffeeScripts to the output and creates nested directories' do
         expect(FileUtils).to receive(:mkdir_p).with("#{ @project_path }/javascripts/x/y")
@@ -127,7 +127,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
         expect(File).to receive(:open).with("#{ @project_path }/javascripts/x/y/b.js", 'w')
         expect(File).to receive(:open).with("#{ @project_path }/javascripts/x/y/c.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee', 'app/coffeescripts/x/y/b.coffee.md', 'app/coffeescripts/x/y/c.litcoffee'],
-                   [watcher],  output: 'javascripts', shallow: false)
+                   [pattern],  output: 'javascripts', shallow: false)
       end
 
       context 'with the :source_map option' do
@@ -137,13 +137,13 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/javascripts/x/y/b.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/javascripts/x/y/c.js.map", 'w')
           runner.run(['app/coffeescripts/x/y/a.coffee', 'app/coffeescripts/x/y/b.coffee.md', 'app/coffeescripts/x/y/c.litcoffee'],
-                     [watcher],  output: 'javascripts', shallow: false, source_map: true)
+                     [pattern],  output: 'javascripts', shallow: false, source_map: true)
         end
       end
     end
 
     context 'with the :shallow option set to true' do
-      let(:watcher) { Guard::Watcher.new('^app/coffeescripts/(.+)\.(?:coffee|coffee\.md|litcoffee)$') }
+      let(:pattern) { /^app\/coffeescripts\/(.+)\.(?:coffee|coffee\.md|litcoffee)$/ }
 
       it 'compiles the CoffeeScripts to the output without creating nested directories' do
         expect(FileUtils).to receive(:mkdir_p).with("#{ @project_path }/javascripts")
@@ -151,7 +151,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
         expect(File).to receive(:open).with("#{ @project_path }/javascripts/b.js", 'w')
         expect(File).to receive(:open).with("#{ @project_path }/javascripts/c.js", 'w')
         runner.run(['app/coffeescripts/x/y/a.coffee', 'app/coffeescripts/x/y/b.coffee.md', 'app/coffeescripts/x/y/c.litcoffee'],
-                   [watcher],  output: 'javascripts', shallow: true)
+                   [pattern],  output: 'javascripts', shallow: true)
       end
 
       context 'with the :source_map option' do
@@ -161,7 +161,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(File).to receive(:open).with("#{ @project_path }/javascripts/b.js.map", 'w')
           expect(File).to receive(:open).with("#{ @project_path }/javascripts/c.js.map", 'w')
           runner.run(['app/coffeescripts/x/y/a.coffee', 'app/coffeescripts/x/y/b.coffee.md', 'app/coffeescripts/x/y/c.litcoffee'],
-                     [watcher],  output: 'javascripts', shallow: true, source_map: true)
+                     [pattern],  output: 'javascripts', shallow: true, source_map: true)
         end
       end
     end
@@ -185,12 +185,12 @@ RSpec.describe Guard::CoffeeScript::Runner do
           sourceFiles: ['a.coffee'],
           sourceRoot: 'src'
         )
-        runner.run(['src/a.coffee'], [watcher],  output: 'target', source_map: true, input: 'src')
+        runner.run(['src/a.coffee'], [pattern],  output: 'target', source_map: true, input: 'src')
       end
 
       it 'accepts a different source_root' do
         expect(::CoffeeScript).to receive(:compile).with 'src/a.coffee', hash_including(sourceRoot: 'foo')
-        runner.run(['src/a.coffee'], [watcher],  output: 'target', source_map: true, source_root: 'foo')
+        runner.run(['src/a.coffee'], [pattern],  output: 'target', source_map: true, source_root: 'foo')
       end
     end
 
@@ -210,7 +210,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
         expect(::CoffeeScript).to receive(:compile).with 'a.coffee', hash_not_including(literate: true)
         expect(::CoffeeScript).to receive(:compile).with 'b.coffee.md', hash_including(literate: true)
         expect(::CoffeeScript).to receive(:compile).with 'c.litcoffee', hash_including(literate: true)
-        runner.run(['a.coffee', 'b.coffee.md', 'c.litcoffee'], [watcher],  output: 'javascripts')
+        runner.run(['a.coffee', 'b.coffee.md', 'c.litcoffee'], [pattern],  output: 'javascripts')
       end
     end
 
@@ -223,7 +223,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
                                                      title: 'CoffeeScript results',
                                                      image: :failed,
                                                      priority: 2)
-          runner.run(['a.coffee'], [watcher],  output: 'javascripts')
+          runner.run(['a.coffee'], [pattern],  output: 'javascripts')
         end
       end
 
@@ -235,7 +235,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
                                                      title: 'CoffeeScript results',
                                                      image: :failed,
                                                      priority: 2)
-          runner.run(['a.coffee'], [watcher],  output: 'javascripts', noop: true)
+          runner.run(['a.coffee'], [pattern],  output: 'javascripts', noop: true)
         end
       end
 
@@ -243,7 +243,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
         it 'write the error message as javascript file' do
           expect(runner).to receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
           expect(runner).to receive(:write_javascript_file).once.with("throw \"a.coffee: Parse error on line 2: Unexpected 'UNARY'\";", nil, 'a.coffee', 'javascripts', kind_of(Hash))
-          runner.run(['a.coffee'], [watcher],  output: 'javascripts', error_to_js: true)
+          runner.run(['a.coffee'], [pattern],  output: 'javascripts', error_to_js: true)
         end
       end
     end
@@ -254,7 +254,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(formatter).to receive(:success).once.with('Successfully generated javascripts/a.js')
           expect(formatter).to receive(:notify).with('Successfully generated javascripts/a.js',
                                                      title: 'CoffeeScript results')
-          runner.run(['a.coffee'], [watcher],  output: 'javascripts')
+          runner.run(['a.coffee'], [pattern],  output: 'javascripts')
         end
       end
 
@@ -263,19 +263,19 @@ RSpec.describe Guard::CoffeeScript::Runner do
           expect(formatter).to receive(:success).once.with('Successfully verified javascripts/a.js')
           expect(formatter).to receive(:notify).with('Successfully verified javascripts/a.js',
                                                      title: 'CoffeeScript results')
-          runner.run(['a.coffee'], [watcher],  output: 'javascripts',
+          runner.run(['a.coffee'], [pattern],  output: 'javascripts',
                                                noop: true)
         end
       end
 
       context 'with the :hide_success option set to true' do
-        let(:watcher) { Guard::Watcher.new('^app/coffeescripts/.+\.(?:coffee|coffee\.md|litcoffee)$') }
+        let(:pattern) { /^app\/coffeescripts\/.+\.(?:coffee|coffee\.md|litcoffee)$/ }
 
         it 'does not show the success message' do
           expect(formatter).not_to receive(:success).with('Successfully generated javascripts/a.js')
           expect(formatter).not_to receive(:notify).with('Successfully generated javascripts/a.js',
                                                          title: 'CoffeeScript results')
-          runner.run(['app/coffeescripts/x/y/a.coffee'], [watcher],  output: 'javascripts',
+          runner.run(['app/coffeescripts/x/y/a.coffee'], [pattern],  output: 'javascripts',
                                                                      hide_success: true)
         end
       end
@@ -290,26 +290,26 @@ RSpec.describe Guard::CoffeeScript::Runner do
                                                          image: :failed,
                                                          priority: 2)
 
-        2.times { runner.run(['a.coffee'], [watcher],  output: 'javascripts') }
+        2.times { runner.run(['a.coffee'], [pattern],  output: 'javascripts') }
       end
 
       it 'shows the success message only when previous attempt was failure' do
         expect(runner).to receive(:compile).and_raise ::CoffeeScript::CompilationError.new("Parse error on line 2: Unexpected 'UNARY'")
-        runner.run(['a.coffee'], [watcher],  output: 'javascripts',
+        runner.run(['a.coffee'], [pattern],  output: 'javascripts',
                                              hide_success: true)
 
         allow(runner).to receive(:compile).and_return ''
         expect(formatter).to receive(:success).with('Successfully generated javascripts/a.js')
         expect(formatter).to receive(:notify).with('Successfully generated javascripts/a.js',
                                                    title: 'CoffeeScript results')
-        runner.run(['a.coffee'], [watcher],  output: 'javascripts',
+        runner.run(['a.coffee'], [pattern],  output: 'javascripts',
                                              hide_success: true)
       end
     end
   end
 
   describe '#remove' do
-    let(:watcher) { Guard::Watcher.new(%r{src/.+\.(?:coffee|coffee\.md|litcoffee)$}) }
+    let(:pattern) { %r{src/.+\.(?:coffee|coffee\.md|litcoffee)$} }
 
     before do
       expect(File).to receive(:exist?).with('target/a.js').and_return true
@@ -321,7 +321,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
       expect(FileUtils).to receive(:remove_file).with('target/a.js')
       expect(FileUtils).to receive(:remove_file).with('target/b.js')
       expect(FileUtils).to receive(:remove_file).with('target/c.js')
-      runner.remove(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [watcher],  output: 'target')
+      runner.remove(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [pattern],  output: 'target')
     end
 
     it 'shows a notification' do
@@ -329,7 +329,7 @@ RSpec.describe Guard::CoffeeScript::Runner do
       expect(formatter).to receive(:notify).with('Removed target/a.js, target/b.js, target/c.js',
                                                  title: 'CoffeeScript results')
 
-      runner.remove(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [watcher],  output: 'target')
+      runner.remove(['src/a.coffee', 'src/b.coffee.md', 'src/c.litcoffee'], [pattern],  output: 'target')
     end
   end
 end
